@@ -27,7 +27,7 @@ endif
 " expand all directories and add trailing slash to avoid issues later
 let s:dirs = map(copy(g:nv_directories), 'expand(v:val) . "/" ')
 
-if exists('g:nv_main_dir')
+if exists('g:nv_main_directory')
     let s:main_dir = g:nv_main_dir
 else
     let s:main_dir = s:dirs[0]
