@@ -28,7 +28,7 @@ endif
 let s:dirs = map(copy(g:nv_directories), 'expand(v:val) . "/" ')
 
 if exists('g:nv_main_directory')
-    let s:main_dir = g:nv_main_dir
+    let s:main_dir = g:nv_main_directory
 else
     let s:main_dir = s:dirs[0]
 endif
