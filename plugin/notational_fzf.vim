@@ -28,7 +28,7 @@ endif
 let s:dirs = map(copy(g:nv_directories), 'expand(v:val) . "/" ')
 
 if exists('g:nv_main_directory')
-    let s:main_dir = g:nv_main_dir
+    let s:main_dir = g:nv_main_directory
 else
     let s:main_dir = s:dirs[0]
 endif
@@ -50,7 +50,7 @@ function! s:handler(lines) abort
    " preprocess candidates here. expect lines to have fmt:
    " filename:linenum:content
 
-   if len(a:lines) >= 3 | let l:filenames = a:lines[2:] | endif
+   if len(a:lines) >= 3 | let filenames = a:lines[2:] | endif
 
    " handle creating note
    if l:keypress ==? 'ctrl-x'
