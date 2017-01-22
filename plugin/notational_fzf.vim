@@ -1,7 +1,3 @@
-" TODO doc if you have coderay this will work
-" TODO doc ctr-x opens in vertical split.
-" TODO doc: mapping: nnoremap <silent> ... :NV<CR>
-
 if (exists("g:loaded_nv") && g:loaded_nv) || &compatible
     finish
 endif
@@ -50,13 +46,12 @@ function! s:handler(lines) abort
    " preprocess candidates here. expect lines to have fmt:
    " filename:linenum:content
 
-   if len(a:lines) >= 3 | let l:filenames = a:lines[2:] | endif
 
    " handle creating note
    if l:keypress ==? 'ctrl-x'
-       " TODO doc don't type .md
      let candidates = [s:escape(s:main_dir  . '/' . l:query . s:ext)]
    else
+       let l:filenames = a:lines[2:]
        let l:candidates = []
        for l:filename in l:filenames
            " don't forget traiiling space in replacement
