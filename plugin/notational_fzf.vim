@@ -50,7 +50,7 @@ function! s:handler(lines) abort
    " preprocess candidates here. expect lines to have fmt:
    " filename:linenum:content
 
-   if len(a:lines) >= 3 | let l:filenames = a:lines[2:] | endif
+   if len(a:lines) >= 3 | let filenames = a:lines[2:] | endif
 
    " handle creating note
    if l:keypress ==? 'ctrl-x'
