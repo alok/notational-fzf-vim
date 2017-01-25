@@ -6,7 +6,7 @@ tartar of convention that handicaps its retrieval.***
 — [Notational Velocity home page](http://notational.net/)
 
 
-![Usage](/screenshots/Screenshot 2017-01-24 22.50.10.png?raw=true "Usage")
+![Usage](/screenshots/Screenshot 2017-01-24 23.03.27.png?raw=true "Usage")
 
 I want to write everything in Vim. But Vim isn't optimized for
 note-taking. Instead, I used
