@@ -1,5 +1,13 @@
 # Notational FZF
 
+***Loosen the mental blockages to recording information. Scrape away the
+tartar of convention that handicaps its retrieval.***
+
+— [Notational Velocity home page](http://notational.net/)
+
+
+![Usage](/screenshots/Screenshot 2017-01-24 22.50.10.png?raw=true "Usage")
+
 I want to write everything in Vim. But Vim isn't optimized for
 note-taking. Instead, I used
 [nvALT](http://brettterpstra.com/projects/nvalt/) for years, and
@@ -21,13 +29,22 @@ When [Junegunn](https://github.com/junegunn/) made
 could recreate Notational Velocity in Vim.
 
 This plugin allows you to define a list of directories that you want to
-search. The first directory in the list is used as the main directory,
-unless you set `g:nv_main_directory`. If you press `control-x` after
-typing some words, it will use those words as the filename to create a
-file in the main directory. It will then open that file in a vertical
-split. If that file already exists, don't worry, it won't overwrite it.
-This plugin never modifies your files at any point. It can only read,
-open, and create them.
+search. It also handles Notational Velocity's issue with multiple
+databases. UNIX does not allow repeated filenames in the same folder,
+but often the parent folder provides context, like in `workout/TODO.md`
+and `coding/TODO.md`.
+
+The first directory in the list is used as the main directory, unless
+you set `g:nv_main_directory`. If you press `control-x` after typing
+some words, it will use those words as the filename to create a file in
+the main directory. It will then open that file in a vertical split. If
+that file already exists, don't worry, it won't overwrite it. This
+plugin never modifies your files at any point. It can only read, open,
+and create them.
+
+You can define relative links, so adding `./docs` and `./notes` will
+work. Keep in mind that it's relative to your current working directory
+(as Vim interprets it).
 
 This plugin may not work on Windows. I only have a Mac to test it on. It
 works for sure on Mac with Neovim, and *should* work in terminal Vim,
@@ -100,3 +117,25 @@ nnoremap <c-s> :NV<CR>
 let g:nv_default_extension = '.md'
 let g:nv_main_directory = g:nv_directories[0] " default is first in directory list
 ```
+
+## Philosophy
+
+To quote [scrod](https://github.com/scrod/nv/issues/22),
+
+> The reasoning behind Notational Velocity's present lack of
+> multi-database support is that storing notes in separate databases
+> would 1) Require the same kinds of decisions that
+> category/folder-based organizers force upon their users (e.g., "Is
+> this note going to be work-specific or home-specific?"), and 2) Defeat
+> the point of instantaneous searching by requiring, ultimately, the
+> user to repeat each search for every database in use.
+
+-   By providing a default directory, we offer (one) fix to the first
+    issue.
+
+-   By searching the whole set of directories simultaneously, we handle
+    the second.
+
+This plug-in attempts to abstract the operation of note-taking over
+*all* the notes you take, with priority given to one main notes
+directory.
