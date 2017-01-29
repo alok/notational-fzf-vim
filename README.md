@@ -7,39 +7,48 @@ tartar of convention that handicaps its retrieval.***
 
 ![Usage](/screenshots/Screenshot%202017-01-24%2023.03.27.png?raw=true "Usage")
 
-I want to write everything in Vim. But Vim isn't optimized for
-note-taking. Instead, I used
-[nvALT](http://brettterpstra.com/projects/nvalt/) for years, and
-whenever I had to do serious editing, I would open the file in Vim.
+Vim is great for writing. But it isn't optimized for note-taking, where
+you often create lots of little notes and frequently change larger notes
+in a separate directory form the one you're working in. For years I used
+[nvALT](http://brettterpstra.com/projects/nvalt/) and whenever I had to
+do serious editing, I would open the file in Vim.
 
-But some things about nvALT bugged me. It's not meant for large text
-files, and opening them will cause it to lag *a lot*. I can't use
-splits, and having to have a separate window open for it when I'm
-working in Vim is annoying.
+But some things about nvALT bugged me.
+
+-   It's not meant for large text files, and opening them will cause it
+    to lag *a lot*.
+
+-   I can't use splits
+
+-   I do most of my work in Vim, so why have another window open,
+    wasting precious screen space with its inferior editing
+    capabilities. Sorry Brett, but nvALT can't match Vim's editing
+    speed.
+
+-   I also disagree with some parts of Notational Velocity's philosophy.
 
 Plugins like [vim-pad](https://github.com/fmoralesc/vim-pad) didn't do
-it for me either, because I don't want to archive my notes or use the
-first line as the title since I have notes with duplicated titles. I
-just want to be able to search a set of directories and create notes in
-one of them, ***quickly***.
+it for me either, because:
 
-When [Junegunn](https://github.com/junegunn/) made
-[`fzf`](https://github.com/junegunn/fzf), I realized that I could
-recreate Notational Velocity in Vim.
+-   I don't want to archive my notes. I should be able to just search
+    for them.
+-   I don't want to use the first line as the title since I have notes
+    with duplicated titles in different directories, like `README.md`.
+-   I just want to be able to search a set of directories and create
+    notes in one of them, ***quickly***.
+
+When [Junegunn](https://github.com/junegunn/) created
+[`fzf`](https://github.com/junegunn/fzf), I realized that I could have
+all that, in Vim.
 
 This plugin allows you to define a list of directories that you want to
-search. It also handles Notational Velocity's issue with multiple
-databases. UNIX does not allow repeated filenames in the same folder,
-but often the parent folder provides context, like in `workout/TODO.md`
-and `coding/TODO.md`.
-
-The first directory in the list is used as the main directory, unless
-you set `g:nv_main_directory`. If you press `control-x` after typing
-some words, it will use those words as the filename to create a file in
-the main directory. It will then open that file in a vertical split. If
-that file already exists, don't worry, it won't overwrite it. This
-plugin never modifies your files at any point. It can only read, open,
-and create them.
+search. The first directory in the list is used as the main directory,
+unless you set `g:nv_main_directory`. If you press `control-x` after
+typing some words, it will use those words as the filename to create a
+file in the main directory. It will then open that file in a vertical
+split. If that file already exists, don't worry, it won't overwrite it.
+This plugin never modifies your files at any point. It can only read,
+open, and create them.
 
 You can define relative links, so adding `./docs` and `./notes` will
 work. Keep in mind that it's relative to your current working directory
@@ -148,6 +157,14 @@ You can also define your own handler function, in case you don't like
 how this plugin handles input but like how it wraps everything else. It
 *must* be called `NV_note_handler`.
 
+## Potential Use Cases
+
+-   Add `~/notes` and `~/wiki` so your notes are only one key binding
+    away.
+-   Add relative links like `./notes`, `./doc`, etc. to
+    `g:nv_directories` so you can always see/update the documentation of
+    your current project and keep up-to-date personal notes.
+
 ## FAQ
 
 Q: I get an error updating with `vim-plug`.
@@ -171,6 +188,11 @@ To quote [scrod](https://github.com/scrod/nv/issues/22),
 
 -   By searching the whole set of directories simultaneously, we handle
     the second.
+
+It also handles Notational Velocity's issue with multiple databases.
+UNIX does not allow repeated filenames in the same folder, but often the
+parent folder provides context, like in `workout/TODO.md` and
+`coding/TODO.md`.
 
 This plug-in attempts to abstract the operation of note-taking over
 *all* the notes you take, with priority given to one main notes
