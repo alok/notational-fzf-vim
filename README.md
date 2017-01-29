@@ -95,8 +95,8 @@ one of these keys to open up a file:
 -   `c-t`: Open in new tab
 -   `<Enter>`: Open highlighted search result in current buffer
 
-The first few lines of the selected file will be visible if you have
-[`coderay`](https://github.com/rubychan/coderay) installed.
+The first few lines of the selected file will be visible in a preview
+window.
 
 ## Mappings
 
