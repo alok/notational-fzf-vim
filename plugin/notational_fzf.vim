@@ -117,11 +117,13 @@ endfunction
 
 " Use a big ugly option list. The '.. ' is because fzf wants a term of the
 " form 'N.. ' where N is a number.
+" Use backslash in front of 'ag' to ignore aliases.
+
 command! -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
-              \ 'source': 'ag --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')),
+              \ 'source': '\ag --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')),
               \ 'options': '--print-query --ansi --multi --exact' .
               \ ' --delimiter=":" --with-nth=' . s:filepath_index . '.. ' .
               \ ' --tiebreak=length,begin,index ' .
