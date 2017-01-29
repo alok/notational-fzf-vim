@@ -134,6 +134,10 @@ let g:nv_preview_width = 72
 
 " String. Determines where the preview window is. Valid options are: 'right', 'left', 'up', 'down'.
 let g:nv_preview_direction = 'right'
+
+"  Boolean. If set, will truncate each path element to a single character. If
+you have colons in your pathname, this will fail. Not set by default.
+let g:nv_use_short_pathnames = 0
 ```
 
 You can also define your own handler function, in case you don't like

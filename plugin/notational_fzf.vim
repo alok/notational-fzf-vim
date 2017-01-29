@@ -112,6 +112,20 @@ function! s:handler(lines) abort
 
 endfunction
 
+
+if !exists('g:nv_use_short_pathnames')
+    let g:nv_use_short_pathnames = 0
+endif
+
+if g:nv_use_short_pathnames
+    " May God forgive me. TODO put this into a script and add an `sh` script
+    " to put this in /usr/local/bin as `format_path_for_notational_fzf_vim.sh`
+    let s:format_path_expr = join([ " | ", " python -c ", "\"\n", "import sys\n", "for line in sys.stdin:\n", "    filename = line.split(", "'", ":", "'", ")[0].split('/')[1:]\n", "    print('/'  + '/'.join([x[0] for x in filename[:-1]]) + '/' + filename[-1] + ':' + line.split(':')[1]  + ':' +  line.split(':')[2][:-2])\n", "\"" ], '')  " strip trailing newline with [:-2]
+else
+    let s:format_path_expr = ''
+endif
+
+
 " If the file you're looking for is empty, then why does it even exist? It's a
 " note. Just type its name. Hence we ignore lines with only space characters.
 
@@ -123,7 +137,7 @@ command! -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
-              \ 'source': '\ag --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')),
+              \ 'source': '\ag --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')) . s:format_path_expr  . ' ',
               \ 'options': '--print-query --ansi --multi --exact' .
               \ ' --delimiter=":" --with-nth=' . s:filepath_index . '.. ' .
               \ ' --tiebreak=length,begin,index ' .
@@ -134,3 +148,4 @@ command! -bang NV
               \ ' --preview-window=' . g:nv_preview_direction . ':' . g:nv_preview_width .  s:wrap_text .  s:show_preview . ' ',
               \ }
       \ ))
+
