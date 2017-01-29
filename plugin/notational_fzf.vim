@@ -76,6 +76,6 @@ command! -bang NV
           \ fzf#wrap({
               \ 'sink*': function('<sid>handler'),
               \ 'source': 'ag --nogroup "\S" ' . join(map(copy(s:dirs), 's:escape(v:val)')),
-              \ 'options': '--print-query --ansi -m -e --delimiter=":" --with-nth=1.. --tiebreak=length,begin,index --expect=ctrl-s,ctrl-v,ctrl-t,ctrl-x --bind alt-a:select-all,alt-d:deselect-all --color hl:68,hl+:110 --preview "(coderay {1} || cat {}) 2> /dev/null | head -'.&lines.'"',
+              \ 'options': '--print-query --ansi -m -e --delimiter=":" --with-nth=1.. --tiebreak=length,begin,index --expect=ctrl-s,ctrl-v,ctrl-t,ctrl-x --bind alt-a:select-all,alt-d:deselect-all --color hl:68,hl+:110 --preview "(coderay {1} || cat {}) 2> /dev/null | head -'.&lines.'" --preview-window=right:72:wrap',
               \ }
       \ ))
