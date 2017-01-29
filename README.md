@@ -63,12 +63,13 @@ anytime soon.
 
 -   [`fzf`](https://github.com/junegunn/fzf)
 -   [`ag`](https://github.com/ggreer/the_silver_searcher)
--   [`fzf.vim`](https://github.com/junegunn/fzf.vim)
 
 ## Optional Dependencies
 
 -   [`coderay`](https://github.com/rubychan/coderay), for the ability to
     preview files, with syntax highlighting.
+-   [`highlight`](http://www.andre-simon.de/doku/highlight/en/highlight.html).
+    Will be used instead of `coderay` if available.
 
 ## Required settings
 
