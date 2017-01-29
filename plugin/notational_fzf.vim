@@ -117,7 +117,7 @@ command! -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function('<sid>handler'),
-              \ 'source': 'ag --nogroup "\S" ' . join(map(copy(s:dirs), 's:escape(v:val)')),
+              \ 'source': 'ag --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')),
               \ 'options': '--print-query --ansi --multi --exact' .
               \ ' --delimiter=":" --with-nth=' . s:filepath_index . '.. ' .
               \ ' --tiebreak=length,begin,index ' .
