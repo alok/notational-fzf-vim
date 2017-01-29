@@ -14,7 +14,7 @@ else
 endif
 
 if !exists('g:nv_show_filepath')
-    let g:nv_show_filepath = 0
+    let g:nv_show_filepath = 1
 endif
 
 if g:nv_show_filepath
@@ -26,7 +26,7 @@ endif
 
 if !exists('g:nv_wrap_preview_text')
     " No wrap by default.
-    let g:nv_wrap_preview_text = 1
+    let g:nv_wrap_preview_text = 0
 endif
 
 if g:nv_wrap_preview_text
@@ -39,7 +39,7 @@ endif
 
 if !exists('g:nv_show_preview')
     " Hide or show preview window by default. Default is to show it.
-    let g:nv_show_preview = 0
+    let g:nv_show_preview = 1
 endif
 
 if g:nv_show_preview
@@ -53,7 +53,7 @@ endif
 if !exists('g:nv_preview_width')
     " How wide to make preview window. 72 characters is default because pandoc
     " does hard wraps at 72 characters.
-    let g:nv_preview_width = 10
+    let g:nv_preview_width = 72
 endif
 
 if !exists('g:nv_preview_direction')
