@@ -56,6 +56,10 @@ since it's just a wrapper over `fzf`.
 Plug 'https://github.com/Alok/notational-fzf-vim'
 ```
 
+## Changes
+
+Read `CHANGELOG.md`.
+
 ## Dependencies
 
 `ag` is required for its fast search. I'm not planning on changing this
