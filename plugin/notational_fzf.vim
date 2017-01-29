@@ -71,13 +71,13 @@ else
     let s:main_dir = s:dirs[0]
 endif
 
-
 function! s:handler(lines) abort
-   " expect at least 2 elements, query and keypress, which may be empty strings
+   " Expect at least 2 elements, query and keypress, which may be empty
+   " strings.
    let query = a:lines[0]
    let keypress = a:lines[1]
-   " Don't forget to add spaces for the commands
-   " Handle key input
+   " Don't forget to add spaces for the commands.
+   " Handle key input.
    let cmd = get({
                \  'ctrl-s': 'split ',
                 \ 'ctrl-v': 'vertical split ',
@@ -85,11 +85,10 @@ function! s:handler(lines) abort
                 \ 'ctrl-x': 'vertical split ',
                 \ },
                 \ l:keypress, 'edit ')
-   " preprocess candidates here. expect lines to have fmt:
+   " Preprocess candidates here. expect lines to have fmt:
    " filename:linenum:content
 
-
-   " handle creating note
+   " Handle creating note.
    if l:keypress ==? 'ctrl-x'
      let candidates = [s:escape(s:main_dir  . '/' . l:query . s:ext)]
    else
@@ -110,14 +109,22 @@ function! s:handler(lines) abort
 endfunction
 
 " If the file you're looking for is empty, then why does it even exist? It's a
-" note. Just type it's name. Hence we ignore lines with only space characters
+" note. Just type its name. Hence we ignore lines with only space characters.
 
-" Use a big ugly option list
+" Use a big ugly option list. The '.. ' is because fzf wants a term of the
+" form 'N.. ' where N is a number.
 command! -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function('<sid>handler'),
               \ 'source': 'ag --nogroup "\S" ' . join(map(copy(s:dirs), 's:escape(v:val)')),
-              \ 'options': '--print-query --ansi -m -e --delimiter=":" --with-nth=1.. --tiebreak=length,begin,index --expect=ctrl-s,ctrl-v,ctrl-t,ctrl-x --bind alt-a:select-all,alt-d:deselect-all --color hl:68,hl+:110 --preview "(coderay {1} || cat {}) 2> /dev/null | head -'.&lines.'" --preview-window=right:72:wrap',
+              \ 'options': '--print-query --ansi --multi --exact' .
+              \ ' --delimiter=":" --with-nth=' . s:filepath_index . '.. ' .
+              \ ' --tiebreak=length,begin,index ' .
+              \ ' --expect=ctrl-s,ctrl-v,ctrl-t,ctrl-x ' .
+              \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
+              \ ' --color hl:68,hl+:110 ' .
+              \ ' --preview "(highlight -O ansi -l {1} | coderay || cat {}) 2> /dev/null | head -' . &lines . '" ' .
+              \ ' --preview-window=' . g:nv_preview_direction . ':' . g:nv_preview_width .  s:wrap_text .  s:show_preview . ' ',
               \ }
       \ ))
