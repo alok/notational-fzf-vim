@@ -24,8 +24,8 @@ just want to be able to search a set of directories and create notes in
 one of them, ***quickly***.
 
 When [Junegunn](https://github.com/junegunn/) made
-[`fzf.vim`](https://github.com/junegunn/fzf.vim), I realized that I
-could recreate Notational Velocity in Vim.
+[`fzf`](https://github.com/junegunn/fzf), I realized that I could
+recreate Notational Velocity in Vim.
 
 This plugin allows you to define a list of directories that you want to
 search. It also handles Notational Velocity's issue with multiple
