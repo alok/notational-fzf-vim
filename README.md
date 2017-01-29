@@ -136,6 +136,10 @@ let g:nv_preview_width = 72
 let g:nv_preview_direction = 'right'
 ```
 
+You can also define your own handler function, in case you don't like
+how this plugin handles input but like how it wraps everything else. It
+*must* be called `NV_note_handler`.
+
 ## Philosophy
 
 To quote [scrod](https://github.com/scrod/nv/issues/22),
