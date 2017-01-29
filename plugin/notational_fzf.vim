@@ -137,7 +137,7 @@ command! -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
-              \ 'source': '\ag --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')) . s:format_path_expr  . ' ',
+              \ 'source': '\ag --hidden --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')) . s:format_path_expr  . ' ',
               \ 'options': '--print-query --ansi --multi --exact' .
               \ ' --delimiter=":" --with-nth=' . s:filepath_index . '.. ' .
               \ ' --tiebreak=length,begin,index ' .
