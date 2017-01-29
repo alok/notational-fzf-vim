@@ -1,10 +1,3 @@
-if (exists("g:loaded_nv") && g:loaded_nv) || &compatible
-    finish
-endif
-
-let g:loaded_nv = 1
-
-" Copied from fzf.vim
 function! s:escape(path)
   return escape(a:path, ' $%#''"\')
 endfunction
@@ -20,7 +13,56 @@ else
     let s:ext = g:nv_default_extension
 endif
 
-" expand all directories and add trailing slash to avoid issues later
+if !exists('g:nv_show_filepath')
+    let g:nv_show_filepath = 0
+endif
+
+if g:nv_show_filepath
+    let s:filepath_index = 1
+else
+    " Set to 3 to skip filename and linenum display.
+    let s:filepath_index = 3
+endif
+
+if !exists('g:nv_wrap_preview_text')
+    " No wrap by default.
+    let g:nv_wrap_preview_text = 1
+endif
+
+if g:nv_wrap_preview_text
+    " Meant to be spliced into command line.
+    let s:wrap_text = ':wrap'
+else
+    " Use empty string to splice into command line.
+    let s:wrap_text = ''
+endif
+
+if !exists('g:nv_show_preview')
+    " Hide or show preview window by default. Default is to show it.
+    let g:nv_show_preview = 0
+endif
+
+if g:nv_show_preview
+    " Meant to be spliced into command line.
+    let s:show_preview = ''
+else
+    " Use empty string to splice into command line.
+    let s:show_preview = ':hidden'
+endif
+
+if !exists('g:nv_preview_width')
+    " How wide to make preview window. 72 characters is default because pandoc
+    " does hard wraps at 72 characters.
+    let g:nv_preview_width = 10
+endif
+
+if !exists('g:nv_preview_direction')
+    " Valid options are up,down,right,left. Default is "right". No colon for
+    " this command since it's first in the list.
+    let g:nv_preview_direction = 'right'
+endif
+
+" Expand all directories and add trailing slash to avoid issues later.
 let s:dirs = map(copy(g:nv_directories), 'expand(v:val) . "/" ')
 
 if exists('g:nv_main_directory')

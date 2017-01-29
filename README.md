@@ -113,9 +113,27 @@ nnoremap <c-s> :NV<CR>
 ## Optional settings and their defaults
 
 ``` {.vim}
+" String. Set to '' (the empty string) if you don't want an extension appended by default.
 " Don't forget the dot, unless you don't want one.
 let g:nv_default_extension = '.md'
-let g:nv_main_directory = g:nv_directories[0] " default is first in directory list
+
+" String. Default is first in directory list.
+let g:nv_main_directory = g:nv_directories[0]
+
+" Boolean. Display filename in matches. Set to 0 if you want to hide the filename.
+let g:nv_show_filepath = 1
+
+" Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
+let g:nv_show_preview = 1
+
+" Boolean. Wrap text in preview window.
+let g:nv_wrap_preview_text = 1
+
+" Integer. Width of preview window. 72 characters by default.
+let g:nv_preview_width = 72
+
+" String. Determines where the preview window is. Valid options are: 'right', 'left', 'up', 'down'.
+let g:nv_preview_direction = 'right'
 ```
 
 ## Philosophy
