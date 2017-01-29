@@ -5,8 +5,7 @@ tartar of convention that handicaps its retrieval.***
 
 — [Notational Velocity home page](http://notational.net/)
 
-
-![Usage](/screenshots/Screenshot 2017-01-24 23.03.27.png?raw=true "Usage")
+![Usage](/screenshots/Screenshot%202017-01-24%2023.03.27.png?raw=true "Usage")
 
 I want to write everything in Vim. But Vim isn't optimized for
 note-taking. Instead, I used
@@ -139,3 +138,13 @@ To quote [scrod](https://github.com/scrod/nv/issues/22),
 This plug-in attempts to abstract the operation of note-taking over
 *all* the notes you take, with priority given to one main notes
 directory.
+
+## Caveat Emptor
+
+-   There is no Simplenote syncing, and there never will be. I use plain
+    text files synced over services like Dropbox for my notes, and I
+    don't plan on changing that anytime soon.
+
+-   This plugin is just a wrapper over FZF that can view directories and
+    open/create files. That's all it's ever meant to be. Anything else
+    would be put into a separate plugin.
