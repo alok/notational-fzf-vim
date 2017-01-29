@@ -181,3 +181,10 @@ directory.
 -   This plugin is just a wrapper over FZF that can view directories and
     open/create files. That's all it's ever meant to be. Anything else
     would be put into a separate plugin.
+
+## Feedback
+
+Is ***always*** welcome. If you have any ideas or issues, let me know
+and I'll try to address them. Not all will be implemented, but if they
+fit into the philosophy of this plugin or seem really useful, I'll do my
+best.
