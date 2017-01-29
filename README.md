@@ -140,6 +140,12 @@ You can also define your own handler function, in case you don't like
 how this plugin handles input but like how it wraps everything else. It
 *must* be called `NV_note_handler`.
 
+## FAQ
+
+Q: I get an error updating with `vim-plug`.
+
+A: Remove the plugin with `:PlugClean` and re-run `:PlugInstall`.
+
 ## Philosophy
 
 To quote [scrod](https://github.com/scrod/nv/issues/22),
