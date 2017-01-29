@@ -125,7 +125,7 @@ command! -bang NV
               \ 'options': '--print-query --ansi --multi --exact' .
               \ ' --delimiter=":" --with-nth=' . s:filepath_index . '.. ' .
               \ ' --tiebreak=length,begin,index ' .
-              \ ' --expect=ctrl-s,ctrl-v,ctrl-t,ctrl-x ' . g:nv_expect_keys .
+              \ ' --expect=ctrl-s,ctrl-v,ctrl-t,ctrl-x' . g:nv_expect_keys .
               \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
               \ ' --color hl:68,hl+:110 ' .
               \ ' --preview "(highlight -O ansi -l {1} || coderay {1} || cat {1}) 2> /dev/null | head -' . &lines . '" ' .
