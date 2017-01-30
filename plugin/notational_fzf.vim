@@ -113,17 +113,19 @@ function! s:handler(lines) abort
 endfunction
 
 
-if !exists('g:nv_use_short_pathnames')
-    let g:nv_use_short_pathnames = 0
-endif
+" if !exists('g:nv_use_short_pathnames')
+    " let g:nv_use_short_pathnames = 0
+" endif
 
-if g:nv_use_short_pathnames
+" if g:nv_use_short_pathnames
     " May God forgive me. TODO put this into a script and add an `sh` script
     " to put this in /usr/local/bin as `format_path_for_notational_fzf_vim.sh`
-    let s:format_path_expr = join([ " | ", " python -c ", "\"\n", "import sys\n", "for line in sys.stdin:\n", "    filename = line.split(", "'", ":", "'", ")[0].split('/')[1:]\n", "    print('/'  + '/'.join([x[0] for x in filename[:-1]]) + '/' + filename[-1] + ':' + line.split(':')[1]  + ':' +  line.split(':')[2][:-2])\n", "\"" ], '')  " strip trailing newline with [:-2]
-else
+    " TODO make this actually work somehow. FZF takes the text directly, so
+    " getting the filename is harder since you feed it the short path.
+    " let s:format_path_expr = join([ " | ", " python -c ", "\"\n", "import sys\n", "for line in sys.stdin:\n", "    filename = line.split(", "'", ":", "'", ")[0].split('/')[1:]\n", "    print('/'  + '/'.join([x[0] for x in filename[:-1]]) + '/' + filename[-1] + ':' + line.split(':')[1]  + ':' +  line.split(':')[2][:-1])\n", "\"" ], '')  " strip trailing newline with [:-2]
+" else
     let s:format_path_expr = ''
-endif
+" endif
 
 
 " If the file you're looking for is empty, then why does it even exist? It's a
