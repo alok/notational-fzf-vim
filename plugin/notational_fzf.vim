@@ -13,16 +13,6 @@ else
     let s:ext = g:nv_default_extension
 endif
 
-if !exists('g:nv_show_filepath')
-    let g:nv_show_filepath = 1
-endif
-
-if g:nv_show_filepath
-    let s:filepath_index = 1
-else
-    " Set to 3 to skip filename and linenum display.
-    let s:filepath_index = 3
-endif
 
 if !exists('g:nv_wrap_preview_text')
     " No wrap by default.
@@ -113,19 +103,23 @@ function! s:handler(lines) abort
 endfunction
 
 
-" if !exists('g:nv_use_short_pathnames')
-    " let g:nv_use_short_pathnames = 0
-" endif
+if !exists('g:nv_use_short_pathnames')
+    let g:nv_use_short_pathnames = 0
+endif
 
-" if g:nv_use_short_pathnames
+if g:nv_use_short_pathnames
     " May God forgive me. TODO put this into a script and add an `sh` script
     " to put this in /usr/local/bin as `format_path_for_notational_fzf_vim.sh`
     " TODO make this actually work somehow. FZF takes the text directly, so
     " getting the filename is harder since you feed it the short path.
-    " let s:format_path_expr = join([ " | ", " python -c ", "\"\n", "import sys\n", "for line in sys.stdin:\n", "    filename = line.split(", "'", ":", "'", ")[0].split('/')[1:]\n", "    print('/'  + '/'.join([x[0] for x in filename[:-1]]) + '/' + filename[-1] + ':' + line.split(':')[1]  + ':' +  line.split(':')[2][:-1])\n", "\"" ], '')  " strip trailing newline with [:-2]
-" else
+
+    " strip trailing newline with [:-1]
+    let s:filepath_index = '3.. '
+    let s:format_path_expr = ' | shorten_path_for_notational_fzf.py'
+else
+    let s:filepath_index = '1.. '
     let s:format_path_expr = ''
-" endif
+endif
 
 
 " If the file you're looking for is empty, then why does it even exist? It's a
@@ -141,7 +135,7 @@ command! -bang NV
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
               \ 'source': '\ag --hidden --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')) . s:format_path_expr  . ' ',
               \ 'options': '--print-query --ansi --multi --exact' .
-              \ ' --delimiter=":" --with-nth=' . s:filepath_index . '.. ' .
+              \ ' --delimiter=":" --with-nth=' . s:filepath_index .
               \ ' --tiebreak=length,begin,index ' .
               \ ' --expect=ctrl-s,ctrl-v,ctrl-t,ctrl-x' . g:nv_expect_keys .
               \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
@@ -150,4 +144,3 @@ command! -bang NV
               \ ' --preview-window=' . g:nv_preview_direction . ':' . g:nv_preview_width .  s:wrap_text .  s:show_preview . ' ',
               \ }
       \ ))
-

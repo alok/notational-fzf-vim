@@ -125,6 +125,9 @@ nnoremap <c-s> :NV<CR>
 
 ## Optional settings and their defaults
 
+If you want shortened pathnames, you ***must*** copy the Python script in
+this repo somewhere into your `$PATH`.
+
 ``` {.vim}
 " String. Set to '' (the empty string) if you don't want an extension appended by default.
 " Don't forget the dot, unless you don't want one.
@@ -132,9 +135,6 @@ let g:nv_default_extension = '.md'
 
 " String. Default is first in directory list.
 let g:nv_main_directory = g:nv_directories[0]
-
-" Boolean. Display filename in matches. Set to 0 if you want to hide the filename.
-let g:nv_show_filepath = 1
 
 " Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
 let g:nv_show_preview = 1
@@ -147,6 +147,11 @@ let g:nv_preview_width = 72
 
 " String. Determines where the preview window is. Valid options are: 'right', 'left', 'up', 'down'.
 let g:nv_preview_direction = 'right'
+
+" Boolean. If set, will truncate each path element to a single character. If
+you have colons in your pathname, this will fail. Not set by default.
+let g:nv_use_short_pathnames = 0
+ ```
 ```
 
 You can also define your own handler function, in case you don't like

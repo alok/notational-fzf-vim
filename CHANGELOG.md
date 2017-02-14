@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Add (working) short pathnames feature
+
 ## 0.2.0
 
 -   Updated README to include use cases and to be easier to read.
