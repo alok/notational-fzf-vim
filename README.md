@@ -125,8 +125,11 @@ nnoremap <c-s> :NV<CR>
 
 ## Optional settings and their defaults
 
-If you want shortened pathnames, you ***must*** copy the Python script in
-this repo somewhere into your `$PATH`.
+If you want shortened pathnames, you ***must*** copy the Python script
+in this repo somewhere into your `$PATH`.
+
+It *must* be named `shorten_path_for_notational_fzf.py` and have
+executable permissions.
 
 ``` {.vim}
 " String. Set to '' (the empty string) if you don't want an extension appended by default.
