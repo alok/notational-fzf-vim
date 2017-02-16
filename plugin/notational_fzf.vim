@@ -108,12 +108,6 @@ if !exists('g:nv_use_short_pathnames')
 endif
 
 if g:nv_use_short_pathnames
-    " May God forgive me. TODO put this into a script and add an `sh` script
-    " to put this in /usr/local/bin as `format_path_for_notational_fzf_vim.sh`
-    " TODO make this actually work somehow. FZF takes the text directly, so
-    " getting the filename is harder since you feed it the short path.
-
-    " strip trailing newline with [:-1]
     let s:filepath_index = '3.. '
     let s:format_path_expr = ' | shorten_path_for_notational_fzf.py'
 else
