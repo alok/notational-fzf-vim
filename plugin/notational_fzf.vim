@@ -109,7 +109,7 @@ endif
 
 if g:nv_use_short_pathnames
     let s:filepath_index = '3.. '
-    let s:format_path_expr = ' | shorten_path_for_notational_fzf.py'
+    let s:format_path_expr = ' | shorten_path_for_notational_fzf.py '
 else
     let s:filepath_index = '1.. '
     let s:format_path_expr = ''
@@ -127,7 +127,7 @@ command! -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
-              \ 'source': '\ag --hidden --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')) . s:format_path_expr  . ' ',
+              \ 'source': '\ag --hidden --nogroup "\S" ' . join(map(copy(s:dirs), 's:escape(v:val)')) . s:format_path_expr  . ' 2>/dev/null ' . ' ',
               \ 'options': '--print-query --ansi --multi --exact' .
               \ ' --delimiter=":" --with-nth=' . s:filepath_index .
               \ ' --tiebreak=length,begin,index ' .
