@@ -131,6 +131,8 @@ in this repo somewhere into your `$PATH`.
 It *must* be named `shorten_path_for_notational_fzf.py` and have
 executable permissions.
 
+You can toggle the preview window by pressing `alt-p`.
+
 ``` {.vim}
 " String. Set to '' (the empty string) if you don't want an extension appended by default.
 " Don't forget the dot, unless you don't want one.
