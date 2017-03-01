@@ -74,8 +74,16 @@ Read `CHANGELOG.md`.
 `ag` is required for its fast search. I'm not planning on changing this
 anytime soon.
 
--   [`fzf`](https://github.com/junegunn/fzf)
--   [`fzf.vim`](https://github.com/junegunn/fzf.vim)
+-   [`fzf`](https://github.com/junegunn/fzf).
+
+-   `fzf` Vim plugin. Install the Vim plugin that comes with `fzf`,
+    which can be done like so if you use
+    [vim-plug](https://github.com/junegunn/vim-plug).
+
+    ``` {.vim}
+    `Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }`
+    ```
+
 -   [`ag`](https://github.com/ggreer/the_silver_searcher)
 
 ## Optional Dependencies
