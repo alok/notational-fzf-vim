@@ -75,6 +75,7 @@ Read `CHANGELOG.md`.
 anytime soon.
 
 -   [`fzf`](https://github.com/junegunn/fzf)
+-   [`fzf.vim`](https://github.com/junegunn/fzf.vim)
 -   [`ag`](https://github.com/ggreer/the_silver_searcher)
 
 ## Optional Dependencies
