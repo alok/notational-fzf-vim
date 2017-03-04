@@ -5,7 +5,16 @@ tartar of convention that handicaps its retrieval.***
 
 — [Notational Velocity home page](http://notational.net/)
 
-![Usage](/screenshots/Screenshot%202017-01-24%2023.03.27.png?raw=true "Usage")
+## Usage
+
+See the following GIF:
+
+![Usage](/screenshots/usage.gif?raw=true "Usage")
+
+![Usage](/screenshots/lazy-eval.png?raw=true "Usage")
+
+
+## Description
 
 Vim is great for writing. But it isn't optimized for note-taking, where
 you often create lots of little notes and frequently change larger notes
