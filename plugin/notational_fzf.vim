@@ -66,6 +66,9 @@ else
 endif
 
 function! s:handler(lines) abort
+    if a:lines == [] || a:lines = ['','','']
+        return
+    endif
    " Expect at least 2 elements, query and keypress, which may be empty
    " strings.
    let query = a:lines[0]
