@@ -66,7 +66,7 @@ else
 endif
 
 function! s:handler(lines) abort
-    if a:lines == [] || a:lines = ['','','']
+    if a:lines == [] || a:lines == ['','','']
         return
     endif
    " Expect at least 2 elements, query and keypress, which may be empty
@@ -118,11 +118,20 @@ else
     let s:format_path_expr = ''
 endif
 
+function! s:surround_in_single_quotes(str)
+    return "'" . a:str . "'"
+endfunction
+
+function! s:ignore_list_to_str(pattern)
+    return join(map(copy(a:pattern), ' " --ignore " . s:surround_in_single_quotes(v:val) . " " ' ))
+endfunction
+
 if !exists('g:nv_ignore_pattern')
     let s:nv_ignore_pattern = ' '
 else
-    let s:nv_ignore_pattern = ' --ignore ' . "'" . g:nv_ignore_pattern . "'"
+    let s:nv_ignore_pattern = s:ignore_list_to_str(g:nv_ignore_pattern)
 endif
+
 
 
 " If the file you're looking for is empty, then why does it even exist? It's a

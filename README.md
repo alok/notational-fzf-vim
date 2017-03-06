@@ -179,8 +179,9 @@ let g:nv_preview_direction = 'right'
 you have colons in your pathname, this will fail. Not set by default.
 let g:nv_use_short_pathnames = 0
 
-"String. Shell glob pattern. Ignore all filenames that match this pattern.
-let g:nv_ignore_pattern = 'summarize-*'
+"List of Strings. Shell glob patterns. Ignore all filenames that match any of
+the patterns.
+let g:nv_ignore_pattern = ['summarize-*', 'misc*']
 ```
 
 You can also define your own handler function, in case you don't like
