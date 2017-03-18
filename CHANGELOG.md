@@ -1,3 +1,7 @@
+## 0.4.0
+
+- Add support for files in `g:nv_directories`
+
 ## 0.3.0
 
 - Add (working) short pathnames feature
