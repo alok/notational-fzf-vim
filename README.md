@@ -104,12 +104,16 @@ anytime soon.
 
 ## Required settings
 
-You have to define a list of directories (which must be strings) to
-search.
+You have to define a list of directories *or* files (which all must be
+strings) to search. This setting is named `g:nv_directories` for
+backward compatibility.
+
+Remember that these can be relative links.
 
 ``` {.vim}
 " example
-let g:nv_directories = ['~/wiki', '~/writing', '~/code']
+let g:nv_directories = ['~/wiki', '~/writing', '~/code', 'docs.md' ,
+'./notes.md']
 ```
 
 ## Usage
