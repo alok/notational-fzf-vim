@@ -112,7 +112,8 @@ endif
 
 if g:nv_use_short_pathnames
     let s:filepath_index = '3.. '
-    let s:format_path_expr = ' | shorten_path_for_notational_fzf.py '
+    let s:format_path_expr = ' | ' . fnameescape(expand('%:p:h:h')) . '/shorten_path_for_notational_fzf.py '
+
 else
     let s:filepath_index = '1.. '
     let s:format_path_expr = ''

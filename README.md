@@ -147,13 +147,11 @@ nnoremap <c-s> :NV<CR>
 
 ## Optional settings and their defaults
 
-If you want shortened pathnames, you ***must*** copy the Python script
-in this repo somewhere into your `$PATH`.
+You can shorten pathnames by setting `g:nv_use_short_pathnames = 1`.
 
-It *must* be named `shorten_path_for_notational_fzf.py` and have
-executable permissions.
-
-You can toggle the preview window by pressing `alt-p`.
+You can toggle displaying the preview window by pressing `alt-p`. This
+is handy on smaller screens. If yourself don't want to show the window,
+set `g:nv_show_preview = 0`.
 
 ``` {.vim}
 " String. Set to '' (the empty string) if you don't want an extension appended by default.
