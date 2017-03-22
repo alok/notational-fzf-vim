@@ -90,7 +90,7 @@ anytime soon.
     [vim-plug](https://github.com/junegunn/vim-plug).
 
     ``` {.vim}
-    `Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }`
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     ```
 
 -   [`ag`](https://github.com/ggreer/the_silver_searcher)
@@ -104,7 +104,7 @@ anytime soon.
 
 ## Required settings
 
-You have to define a list of directories *or* files (which all must be
+You have to define a list of directories **or** files (which all must be
 strings) to search. This setting is named `g:nv_directories` for
 backward compatibility.
 
@@ -146,7 +146,7 @@ default. You should use whatever mapping or mappings work best for you.
 For example,
 
 ``` {.vim}
-nnoremap <c-s> :NV<CR>
+nnoremap <silent> <c-s> :NV<CR>
 ```
 
 ## Optional settings and their defaults
@@ -154,8 +154,8 @@ nnoremap <c-s> :NV<CR>
 You can shorten pathnames by setting `g:nv_use_short_pathnames = 1`.
 
 You can toggle displaying the preview window by pressing `alt-p`. This
-is handy on smaller screens. If yourself don't want to show the window,
-set `g:nv_show_preview = 0`.
+is handy on smaller screens. If yourself don't want to show the window
+by default, set `g:nv_show_preview = 0`.
 
 ``` {.vim}
 " String. Set to '' (the empty string) if you don't want an extension appended by default.
