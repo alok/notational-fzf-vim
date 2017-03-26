@@ -8,7 +8,7 @@ if !exists('g:nv_directories')
     finish
 endif
 
-let s:ext = exists('g:nv_default_extension') ? g:nv_default_extension : '.md'
+let s:ext = get(g:, 'nv_default_extension', '.md')
 let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? ':wrap' : ''
 
 " Show preview unless user set it to be hidden
@@ -27,7 +27,7 @@ let s:expect_keys = get(g:,'nv_expect_keys', '')
 " Expand all directories and add trailing slash to avoid issues later.
 let s:dirs = map(copy(g:nv_directories), 'expand(v:val)')
 
-let s:main_dir = exists('g:nv_main_directory') ? g:nv_main_directory : s:dirs[0]
+let s:main_dir = get(g:, 'nv_main_directory', s:dirs[0])
 
 
 function! s:handler(lines) abort
