@@ -47,7 +47,7 @@ let s:keymap = extend(s:keymap, {
             \ })
 
 " FZF expect comma sep str
-let s:expect_keys = join(keys(s:keymap), ',')
+let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []), ',')
 
 
 "================================ Short Pathnames ==========================

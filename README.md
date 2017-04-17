@@ -193,12 +193,17 @@ let g:nv_preview_width = 40
 let g:nv_preview_direction = 'right'
 
 " Boolean. If set, will truncate each path element to a single character. If
-you have colons in your pathname, this will fail. Not set by default.
+" you have colons in your pathname, this will fail. Not set by default.
 let g:nv_use_short_pathnames = 0
 
 "List of Strings. Shell glob patterns. Ignore all filenames that match any of
-the patterns.
+" the patterns.
 let g:nv_ignore_pattern = ['summarize-*', 'misc*']
+
+" List of Strings. Key mappings like above in case you want to define your own
+" handler function. Most users won't want to set this to anything.
+
+let g:nv_expect_keys = []
 ```
 
 You can also define your own handler function, in case you don't like
