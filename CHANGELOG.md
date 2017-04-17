@@ -6,6 +6,7 @@
     -   `..`
     -   `~`
 -   Python 3 is now required for the path shortening script to work.
+-   Key mappings to open files are now customizable.
 
 ## 0.5.0
 

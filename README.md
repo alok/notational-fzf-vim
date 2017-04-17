@@ -128,7 +128,9 @@ each other. You can use the arrow keys or `c-p` and `c-n` to scroll up
 and down the search results, and then hit one of these keys to open up a
 file:
 
--   `c-x`: Use search string as filename and open in vertical split
+Note that the following options can be customized.
+
+-   `c-x`: Use search string as filename and open in vertical split.
 -   `c-v`: Open in vertical split
 -   `c-s`: Open in horizontal split
 -   `c-t`: Open in new tab
@@ -164,6 +166,19 @@ let g:nv_default_extension = '.md'
 
 " String. Default is first in directory list.
 let g:nv_main_directory = g:nv_directories[0]
+
+" Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
+" 'command' or 'alt-KEY' : 'command'. See examples below.
+let g:nv_keymap = {'ctrl-s': 'split ',
+                    \ 'ctrl-v': 'vertical split ',
+                    \ 'ctrl-t': 'tabedit ',
+                    \ })
+
+" String. Must be in the form 'ctrl-KEY' or 'alt-KEY'
+let g:nv_create_note_key = 'ctrl-x'
+
+" String. Controls how new note window is created.
+let g:nv_create_note_window = 'vertical split'
 
 " Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
 let g:nv_show_preview = 1

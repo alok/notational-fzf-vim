@@ -3,6 +3,8 @@ function! s:escape(path)
 endfunction
 
 
+"============================== User settings ==============================
+
 if !exists('g:nv_directories')
     echomsg 'g:nv_directories is not defined'
     finish
@@ -22,53 +24,34 @@ let s:preview_width = string(float2nr(str2float(get(g:,'nv_preview_width', 40)) 
 " this command since it's first in the list.
 let s:preview_direction = get(g:,'nv_preview_direction', 'right')
 
-let s:expect_keys = get(g:,'nv_expect_keys', '')
 
 " Expand all directories and add trailing slash to avoid issues later.
 let s:dirs = map(copy(g:nv_directories), 'expand(v:val)')
 
 let s:main_dir = get(g:, 'nv_main_directory', s:dirs[0])
 
+"=========================== Keymap ========================================
 
-function! s:handler(lines) abort
-    if a:lines == [] || a:lines == ['','','']
-        return
-    endif
-   " Expect at least 2 elements, query and keypress, which may be empty
-   " strings.
-   let query = a:lines[0]
-   let keypress = a:lines[1]
-   " Don't forget to add spaces for the commands.
-   " Handle key input.
-   let cmd = get({
-               \  'ctrl-s': 'split ',
-                \ 'ctrl-v': 'vertical split ',
-                \ 'ctrl-t': 'tabedit ',
-                \ 'ctrl-x': 'vertical split ',
-                \ },
-                \ l:keypress, 'edit ')
-   " Preprocess candidates here. expect lines to have fmt:
-   " filename:linenum:content
+let s:create_note_key = get(g:, 'nv_create_note_key', 'ctrl-x')
+let s:create_note_window = get(g:, 'nv_create_note_window', 'vertical split ')
 
-   " Handle creating note.
-   if l:keypress ==? 'ctrl-x'
-     let candidates = [s:escape(s:main_dir  . '/' . l:query . s:ext)]
-   else
-       let l:filenames = a:lines[2:]
-       let l:candidates = []
-       for l:filename in l:filenames
-           " don't forget traiiling space in replacement
-           let l:linenum = substitute(filename, '\v.{-}:(\d+):.*$', '+\1 ', '')
-           let l:name = substitute(filename, '\v(.{-}):\d+:.*$', '\1', '')
-           call add(l:candidates, l:linenum . s:escape(l:name))
-       endfor
-   endif
+let s:keymap = get(g:, 'nv_keymap',
+            \ {'ctrl-s': 'split ',
+            \ 'ctrl-v': 'vertical split ',
+            \ 'ctrl-t': 'tabedit ',
+            \ })
 
-   for candidate in candidates
-       execute l:cmd . candidate
-   endfor
+" Use `extend` in case user overrides default keys
+let s:keymap = extend(s:keymap, {
+            \ s:create_note_key: s:create_note_window,
+            \ })
 
-endfunction
+" FZF expect comma sep str
+let s:expect_keys = join(keys(s:keymap), ',')
+
+
+"================================ Short Pathnames ==========================
+
 
 if get(g:, 'nv_use_short_pathnames', 0)
     let s:filepath_index = '3.. '
@@ -78,6 +61,9 @@ else
     let s:format_path_expr = ''
 endif
 
+
+"============================ Ignore patterns ==============================
+
 function! s:surround_in_single_quotes(str)
     return "'" . a:str . "'"
 endfunction
@@ -86,7 +72,46 @@ function! s:ignore_list_to_str(pattern)
     return join(map(copy(a:pattern), ' " --ignore " . s:surround_in_single_quotes(v:val) . " " ' ))
 endfunction
 
+
 let s:nv_ignore_pattern = exists('g:nv_ignore_pattern') ? s:ignore_list_to_str(g:nv_ignore_pattern) : ''
+
+
+"============================== Handler Function ===========================
+
+function! s:handler(lines) abort
+    " exit if empty
+    if a:lines == [] || a:lines == ['','','']
+        return
+    endif
+   " Expect at least 2 elements, `query` and `keypress`, which may be empty
+   " strings.
+   let query    = a:lines[0]
+   let keypress = a:lines[1]
+   " `edit` is fallback in case something goes wrong
+   let cmd = get(s:keymap, keypress, 'edit ')
+   " Preprocess candidates here. expect lines to have fmt
+   " filename:linenum:content
+
+   " Handle creating note.
+   if keypress ==? s:create_note_key
+     let candidates = [s:escape(s:main_dir  . '/' . query . s:ext)]
+   else
+       let filenames = a:lines[2:]
+       let candidates = []
+       for filename in filenames
+           " don't forget traiiling space in replacement
+           let linenum = substitute(filename, '\v.{-}:(\d+):.*$', '+\1 ', '')
+           let name = substitute(filename, '\v(.{-}):\d+:.*$', '\1', '')
+           call add(candidates, linenum . s:escape(name))
+       endfor
+   endif
+
+   for candidate in candidates
+       execute cmd . ' ' . candidate
+   endfor
+
+endfunction
+
 
 " If the file you're looking for is empty, then why does it even exist? It's a
 " note. Just type its name. Hence we ignore lines with only space characters.
@@ -103,7 +128,7 @@ command! -bang NV
               \ 'options': '--print-query --ansi --multi --exact' .
               \ ' --delimiter=":" --with-nth=' . s:filepath_index .
               \ ' --tiebreak=length,begin,index ' .
-              \ ' --expect=ctrl-s,ctrl-v,ctrl-t,ctrl-x' . s:expect_keys .
+              \ ' --expect=' . s:expect_keys .
               \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
               \ ' --color hl:68,hl+:110 ' .
               \ ' --preview "(highlight -O ansi -l {1} || coderay {1} || cat {1}) 2> /dev/null | head -' . &lines . '" ' .
