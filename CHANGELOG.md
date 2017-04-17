@@ -1,10 +1,14 @@
+## 0.5.0
+
+-   `g:nv_preview_width` was changed to a percentage.
+
 ## 0.4.0
 
-- Add support for files in `g:nv_directories`
+-   Add support for files in `g:nv_directories`
 
 ## 0.3.0
 
-- Add (working) short pathnames feature
+-   Add (working) short pathnames feature
 
 ## 0.2.0
 

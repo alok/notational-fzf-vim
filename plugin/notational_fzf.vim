@@ -16,7 +16,7 @@ let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : ':hidden'
 
 " How wide to make preview window. 72 characters is default because pandoc
 " does hard wraps at 72 characters.
-let s:preview_width = get(g:,'nv_preview_width', 72)
+let s:preview_width = string(float2nr(str2float(get(g:,'nv_preview_width', 40)) / 100.0 * winwidth('.')))
 
 " Valid options are ['up', 'down', 'right', 'left']. Default is 'right'. No colon for
 " this command since it's first in the list.

@@ -171,8 +171,8 @@ let g:nv_show_preview = 1
 " Boolean. Wrap text in preview window.
 let g:nv_wrap_preview_text = 1
 
-" Integer. Width of preview window. 72 characters by default.
-let g:nv_preview_width = 72
+" Float. Width of preview window as a percentage of screen's width. 40% by default.
+let g:nv_preview_width = 40
 
 " String. Determines where the preview window is. Valid options are: 'right', 'left', 'up', 'down'.
 let g:nv_preview_direction = 'right'
