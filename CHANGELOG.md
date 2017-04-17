@@ -1,6 +1,17 @@
+## 0.6.0
+
+-   Improve path shortening to display (in decreasing order of
+    priority):
+    -   `.`
+    -   `..`
+    -   `~`
+-   Python 3 is now required for the path shortening script to work.
+
 ## 0.5.0
 
--   `g:nv_preview_width` was changed to a percentage.
+-   `g:nv_preview_width` is now a percentage. This makes it more useful
+    on small screens, but slightly less useful on large ones without
+    some config.
 
 ## 0.4.0
 
