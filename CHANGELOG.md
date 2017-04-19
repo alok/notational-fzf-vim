@@ -7,6 +7,8 @@
     -   `~`
 -   Python 3 is now required for the path shortening script to work.
 -   Key mappings to open files are now customizable.
+-   set `highlight` to use `truecolor` if available and Solarized Dark
+    background.
 
 ## 0.5.0
 

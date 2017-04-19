@@ -76,6 +76,9 @@ endfunction
 let s:nv_ignore_pattern = exists('g:nv_ignore_pattern') ? s:ignore_list_to_str(g:nv_ignore_pattern) : ''
 
 
+"============================== Other settings ===========================
+let s:highlight_format = has('termguicolors') ? 'truecolor' : 'xterm256'
+
 "============================== Handler Function ===========================
 
 function! s:handler(lines) abort
@@ -131,7 +134,7 @@ command! -bang NV
               \ ' --expect=' . s:expect_keys .
               \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
               \ ' --color hl:68,hl+:110 ' .
-              \ ' --preview "(highlight -O ansi -l {1} || coderay {1} || cat {1}) 2> /dev/null | head -' . &lines . '" ' .
+              \ ' --preview "(highlight --quiet --force --out-format=' . s:highlight_format . ' --style solarized-dark -l {1} || coderay {1} || cat {1}) 2> /dev/null | head -' . &lines . '" ' .
               \ ' --preview-window=' . s:preview_direction . ':' . s:preview_width .  s:wrap_text .  s:show_preview . ' ',
               \ }
       \ ))
