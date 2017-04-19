@@ -1,3 +1,8 @@
+## 0.7.0
+
+-   You can now restrict your search with arguments passed to `:NV`
+-   Fixed a bug that made preview window too narrow
+
 ## 0.6.0
 
 -   Improve path shortening to display (in decreasing order of

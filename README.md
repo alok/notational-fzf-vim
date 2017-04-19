@@ -116,17 +116,25 @@ let g:nv_directories = ['~/wiki', '~/writing', '~/code', 'docs.md' ,
 './notes.md']
 ```
 
-## Usage
+## Detailed Usage
 
-This plugin unites searching and file creation. Type `:NV` or bind it to
-a mapping to bring up a fuzzy search menu. Type in your search terms and
-it will fuzzy search for them.
+This plugin unites searching and file creation. It defines a command
+`:NV`, which can take 0 or more arguments, which are interpreted as
+regexes.
+
+Type `:NV` or bind it to a mapping to bring up a fuzzy search menu. Type
+in your search terms and it will fuzzy search for them.
+
+You can type `:NV` to see all results, and then filter them with FZF.
+You can type `:NV unit testing` to restrict your initial search to lines
+that contain the phrase `python`. `:NV [0-9] [0-9]` will find all
+numbers separated by a space. You know, regexes.
 
 It does not search in a fully fuzzy fashion because that's less useful
 for prose. It looks for full words, but they don't have to be next to
-each other. You can use the arrow keys or `c-p` and `c-n` to scroll up
-and down the search results, and then hit one of these keys to open up a
-file:
+each other, just in the right order. You can use the arrow keys or `c-p`
+and `c-n` to scroll through the search results, and then hit one of
+these keys to open up a file:
 
 Note that the following options can be customized.
 

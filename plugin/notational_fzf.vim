@@ -18,7 +18,7 @@ let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : ':hidden'
 
 " How wide to make preview window. 72 characters is default because pandoc
 " does hard wraps at 72 characters.
-let s:preview_width = string(float2nr(str2float(get(g:,'nv_preview_width', 40)) / 100.0 * winwidth('.')))
+let s:preview_width = string(float2nr(str2float(get(g:,'nv_preview_width', 40)) / 100.0 * &columns))
 
 " Valid options are ['up', 'down', 'right', 'left']. Default is 'right'. No colon for
 " this command since it's first in the list.
@@ -53,6 +53,7 @@ let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []), ',')
 "================================ Short Pathnames ==========================
 
 
+" Can't be default since python3 is required for it to work
 if get(g:, 'nv_use_short_pathnames', 0)
     let s:filepath_index = '3.. '
     let s:format_path_expr = ' | ' . fnameescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py') . ' '
@@ -117,18 +118,26 @@ endfunction
 
 
 " If the file you're looking for is empty, then why does it even exist? It's a
-" note. Just type its name. Hence we ignore lines with only space characters.
+" note. Just type its name. Hence we ignore lines with only space characters,
+" and use the "\S" regex.
 
 " Use a big ugly option list. The '.. ' is because fzf wants a term of the
 " form 'N.. ' where N is a number.
+
 " Use backslash in front of 'ag' to ignore aliases.
 
-command! -bang NV
+command! -nargs=* -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
-              \ 'source': '\ag --hidden ' .  s:nv_ignore_pattern  . ' --nogroup "\S" 2>/dev/null ' . join(map(copy(s:dirs), 's:escape(v:val)')) . ' 2>/dev/null ' . s:format_path_expr  . ' 2>/dev/null ' . ' ',
-              \ 'options': '--print-query --ansi --multi --exact' .
+              \ 'source': '\ag --hidden ' .
+              \ s:nv_ignore_pattern  .
+              \ ' --nogroup ' . '"' .
+              \ (<q-args> ==? '' ? '\S' : <q-args>) .
+              \ '"' . ' 2>/dev/null ' .
+              \ join(map(copy(s:dirs), 's:escape(v:val)')) .
+              \ ' 2>/dev/null ' . s:format_path_expr  . ' 2>/dev/null ' ,
+              \ 'options': '--print-query --ansi --multi --exact ' .
               \ ' --delimiter=":" --with-nth=' . s:filepath_index .
               \ ' --tiebreak=length,begin,index ' .
               \ ' --expect=' . s:expect_keys .

@@ -63,6 +63,14 @@ if __name__ == '__main__':
         # We print the long and short forms, and one is picked in the Vim script
         # that uses this.
         print(
-            filename + ':' + linenum + ':' + shorten(filename) + ':' + linenum
-            + ':' + contents
+            # long form
+            ':'.join([
+                filename,
+                linenum,
+                # short form
+            ] + [
+                shorten(filename),
+                linenum,
+                # rest of line
+            ] + [contents])
         )
