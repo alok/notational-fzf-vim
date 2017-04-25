@@ -131,19 +131,19 @@ command! -nargs=* -bang NV
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
               \ 'source': '\ag --hidden ' .
-              \ s:nv_ignore_pattern  .
-              \ ' --nogroup ' . '"' .
-              \ (<q-args> ==? '' ? '\S' : <q-args>) .
-              \ '"' . ' 2>/dev/null ' .
-              \ join(map(copy(s:dirs), 's:escape(v:val)')) .
-              \ ' 2>/dev/null ' . s:format_path_expr  . ' 2>/dev/null ' ,
+                  \ s:nv_ignore_pattern  .
+                  \ ' --nogroup ' . '"' .
+                  \ (<q-args> ==? '' ? '\S' : <q-args>) .
+                  \ '"' . ' 2>/dev/null ' .
+                  \ join(map(copy(s:dirs), 's:escape(v:val)')) .
+                  \ ' 2>/dev/null ' . s:format_path_expr  . ' 2>/dev/null ' ,
               \ 'options': '--print-query --ansi --multi --exact ' .
-              \ ' --delimiter=":" --with-nth=' . s:filepath_index .
-              \ ' --tiebreak=length,begin,index ' .
-              \ ' --expect=' . s:expect_keys .
-              \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
-              \ ' --color hl:68,hl+:110 ' .
-              \ ' --preview "(highlight --quiet --force --out-format=' . s:highlight_format . ' --style solarized-dark -l {1} || coderay {1} || cat {1}) 2> /dev/null | head -' . &lines . '" ' .
-              \ ' --preview-window=' . s:preview_direction . ':' . s:preview_width .  s:wrap_text .  s:show_preview . ' ',
+                  \ ' --delimiter=":" --with-nth=' . s:filepath_index .
+                  \ ' --tiebreak=length,begin,index ' .
+                  \ ' --expect=' . s:expect_keys .
+                  \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
+                  \ ' --color hl:68,hl+:110 ' .
+                  \ ' --preview "(highlight --quiet --force --out-format=' . s:highlight_format . ' --style solarized-dark -l {1} || coderay {1} || cat {1}) 2> /dev/null | head -' . &lines . '" ' .
+                  \ ' --preview-window=' . s:preview_direction . ':' . s:preview_width .  s:wrap_text .  s:show_preview . ' ',
               \ }
       \ ))

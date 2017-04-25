@@ -15,7 +15,7 @@ def expand_path(path: Path) -> Path:
     return os.path.abspath(os.path.expanduser(path))
 
 
-def prettyprint_path(path, old_path: Path, replacement: Path) -> Path:
+def prettyprint_path(path: Path, old_path: Path, replacement: Path) -> Path:
     # Pretty print the path prefix
     path = path.replace(old_path, replacement, 1)
     # Truncate the rest of the path to a single character.
@@ -30,7 +30,8 @@ def shorten(path: Path) -> Path:
     # `split()` and just shorten `path`.
     path, filename = os.path.split(path)
 
-    replacements = ['.', '..', '~']
+    # use empty replacement for current directory. it expands correctly
+    replacements = ['', '..', '~']
     old_paths = [expand_path(replacement) for replacement in replacements]
 
     for replacement, old_path in zip(replacements, old_paths):
@@ -51,7 +52,7 @@ def shorten(path: Path) -> Path:
 
 if __name__ == '__main__':
     for line in sys.stdin:
-        # Expected fmt is colon separated (name : linenum: contents)
+        # Expected format is colon separated (name:linenum:contents)
         filename, linenum, contents = line.split(sep=':', maxsplit=2)
 
         # Normalize path for further processing.
