@@ -1,3 +1,10 @@
+## 0.8.0
+
+-   New default for preview window that sensibly sets width. Most users
+    should not need to set this anymore.
+-   Short pathname display no longer shows `./` before filename if it's
+    in the current working directory.
+
 ## 0.7.0
 
 -   You can now restrict your search with arguments passed to `:NV`

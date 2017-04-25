@@ -11,14 +11,15 @@ if !exists('g:nv_directories')
 endif
 
 let s:ext = get(g:, 'nv_default_extension', '.md')
-let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? ':wrap' : ''
+let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? 'wrap' : ''
 
 " Show preview unless user set it to be hidden
-let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : ':hidden'
+let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
 
 " How wide to make preview window. 72 characters is default because pandoc
 " does hard wraps at 72 characters.
-let s:preview_width = string(float2nr(str2float(get(g:,'nv_preview_width', 40)) / 100.0 * &columns))
+let s:preview_width = exists('g:nv_preview_width') ? string(float2nr(str2float(g:nv_preview_width) / 100.0 * &columns)) : ''
+
 
 " Valid options are ['up', 'down', 'right', 'left']. Default is 'right'. No colon for
 " this command since it's first in the list.
@@ -144,6 +145,6 @@ command! -nargs=* -bang NV
                   \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
                   \ ' --color hl:68,hl+:110 ' .
                   \ ' --preview "(highlight --quiet --force --out-format=' . s:highlight_format . ' --style solarized-dark -l {1} || coderay {1} || cat {1}) 2> /dev/null | head -' . &lines . '" ' .
-                  \ ' --preview-window=' . s:preview_direction . ':' . s:preview_width .  s:wrap_text .  s:show_preview . ' ',
+                  \ ' --preview-window=' . join([s:preview_direction ,  s:preview_width ,  s:wrap_text ,  s:show_preview]) . ' ',
               \ }
       \ ))
