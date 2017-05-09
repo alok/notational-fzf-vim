@@ -14,6 +14,17 @@ See the following GIF or watch this
 
 ![Usage](/screenshots/lazy-eval.png?raw=true "Usage")
 
+## Installation
+
+``` {.vim}
+" with vim-plug
+Plug 'https://github.com/Alok/notational-fzf-vim'
+```
+
+## Changes
+
+Read `CHANGELOG.md`.
+
 ## Description
 
 Vim is great for writing. But it isn't optimized for note-taking, where
@@ -67,17 +78,6 @@ This plugin may not work on Windows. I only have a Mac to test it on. It
 works for sure on Mac with Neovim, and *should* work in terminal Vim,
 since it's just a wrapper over `fzf`.
 
-## Installation
-
-``` {.vim}
-" with vim-plug
-Plug 'https://github.com/Alok/notational-fzf-vim'
-```
-
-## Changes
-
-Read `CHANGELOG.md`.
-
 ## Dependencies
 
 `ag` is required for its fast search. I'm not planning on changing this
@@ -102,7 +102,7 @@ anytime soon.
 -   [`highlight`](http://www.andre-simon.de/doku/highlight/en/highlight.html).
     Will be used instead of `coderay` if available.
 
-## Required settings
+## Required Settings
 
 You have to define a list of directories **or** files (which all must be
 strings) to search. This setting is named `g:nv_directories` for
@@ -159,7 +159,7 @@ For example,
 nnoremap <silent> <c-s> :NV<CR>
 ```
 
-## Optional settings and their defaults
+## Optional Settings and Their Defaults
 
 You can shorten pathnames by setting `g:nv_use_short_pathnames = 1`.
 
