@@ -131,11 +131,11 @@ command! -nargs=* -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
-              \ 'source': '\ag --hidden ' .
+              \ 'source': '\ag --hidden --nomultiline --nocolor ' .
                   \ s:nv_ignore_pattern  .
-                  \ ' --nogroup ' . '"' .
-                  \ (<q-args> ==? '' ? '\S' : <q-args>) .
-                  \ '"' . ' 2>/dev/null ' .
+                  \ ' --nogroup --filename ' .
+                  \ (<q-args> ==? '' ? '-F " "' : '"' . <q-args> . '"') .
+                  \ ' 2>/dev/null ' .
                   \ join(map(copy(s:dirs), 's:escape(v:val)')) .
                   \ ' 2>/dev/null ' . s:format_path_expr  . ' 2>/dev/null ' ,
               \ 'options': '--print-query --ansi --multi --exact ' .
