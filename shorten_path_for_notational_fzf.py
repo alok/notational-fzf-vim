@@ -15,13 +15,16 @@ def expand_path(path: Path) -> Path:
     return os.path.abspath(os.path.expanduser(path))
 
 
+# These are floated to the top so they aren't recalculated every loop
+REPLACEMENTS = ('', os.pardir, '~')
+old_paths = [expand_path(replacement) for replacement in REPLACEMENTS]
+
+
 def prettyprint_path(path: Path, old_path: Path, replacement: Path) -> Path:
     # Pretty print the path prefix
     path = path.replace(old_path, replacement, 1)
     # Truncate the rest of the path to a single character.
-    short_path = os.path.join(
-        replacement, * [x[0] for x in pathlib.PurePath(path).parts[1:]]
-    )
+    short_path = os.path.join(replacement, * [x[0] for x in pathlib.PurePath(path).parts[1:]])
     return short_path
 
 
@@ -31,10 +34,8 @@ def shorten(path: Path) -> Path:
     path, filename = os.path.split(path)
 
     # use empty replacement for current directory. it expands correctly
-    replacements = ['', '..', '~']
-    old_paths = [expand_path(replacement) for replacement in replacements]
 
-    for replacement, old_path in zip(replacements, old_paths):
+    for replacement, old_path in zip(REPLACEMENTS, old_paths):
         if path.startswith(old_path):
             short_path = prettyprint_path(path, old_path, replacement)
             # to avoid multiple replacements
