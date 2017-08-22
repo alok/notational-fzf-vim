@@ -44,7 +44,7 @@ let s:keymap = get(g:, 'nv_keymap',
 
 " Use `extend` in case user overrides default keys
 let s:keymap = extend(s:keymap, {
-            \ s:create_note_key: s:create_note_window,
+            \ s:create_note_key : s:create_note_window,
             \ })
 
 " FZF expect comma sep str
