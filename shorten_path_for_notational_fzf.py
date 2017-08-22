@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # encoding: utf-8
 
-import sys
-import pathlib
 import os
+import pathlib
+import sys
 
 # Type alias.
 Path = str
@@ -43,36 +43,30 @@ def shorten(path: Path) -> Path:
 
     # If no replacement was found, shorten the entire path.
     else:
-        short_path = os.path.join(
-            * [x[0] for x in pathlib.PurePath(path).parts]
-        )
+        short_path = os.path.join(* [x[0] for x in pathlib.PurePath(path).parts])
 
     # This list will always have len 2, so we can unpack it.
     return os.path.join(short_path, filename)
 
 
+def process_line(line) -> None:
+    # Expected format is colon separated (name:linenum:contents)
+    filename, linenum, contents = line.split(sep=':', maxsplit=2)
+
+    # Normalize path for further processing.
+    filename = expand_path(filename)
+
+    # Drop trailing newline.
+    contents = contents.rstrip()
+
+    # format is: long form, short form, rest of line. This is so vim can process it.
+    formatted_line = ':'.join([filename, linenum] + [shorten(filename), linenum] + [contents])
+
+    # We print the long and short forms, and one is picked in the Vim script
+    # that uses this.
+    print(formatted_line)
+
+
 if __name__ == '__main__':
     for line in sys.stdin:
-        # Expected format is colon separated (name:linenum:contents)
-        filename, linenum, contents = line.split(sep=':', maxsplit=2)
-
-        # Normalize path for further processing.
-        filename = expand_path(filename)
-
-        # Drop trailing newline.
-        contents = contents.rstrip()
-
-        # We print the long and short forms, and one is picked in the Vim script
-        # that uses this.
-        print(
-            # long form
-            ':'.join([
-                filename,
-                linenum,
-                # short form
-            ] + [
-                shorten(filename),
-                linenum,
-                # rest of line
-            ] + [contents])
-        )
+        process_line(line)
