@@ -57,7 +57,8 @@ let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []), ',')
 " Can't be default since python3 is required for it to work
 if get(g:, 'nv_use_short_pathnames', 0)
     let s:filepath_index = '3.. '
-    let s:format_path_expr = ' | ' . fnameescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py') . ' '
+    let s:python_executable = executable('pypy3') ? ' pypy3 ' : ' python3 '
+    let s:format_path_expr = ' | ' . s:python_executable . fnameescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py') . ' '
 else
     let s:filepath_index = '1.. '
     let s:format_path_expr = ''
