@@ -105,7 +105,7 @@ function! s:handler(lines) abort
        let filenames = a:lines[2:]
        let candidates = []
        for filename in filenames
-           " don't forget traiiling space in replacement
+           " Don't forget trailing space in replacement.
            let linenum = substitute(filename, '\v.{-}:(\d+):.*$', '+\1 ', '')
            let name = substitute(filename, '\v(.{-}):\d+:.*$', '\1', '')
            call add(candidates, linenum . s:escape(name))
