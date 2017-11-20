@@ -70,14 +70,10 @@ endif
 
 "============================ Ignore patterns ==============================
 
-function! s:surround_in_single_quotes(str)
-    return "'" . a:str . "'"
-endfunction
-
 function! s:ignore_list_to_str(pattern)
-    return join(map(copy(a:pattern), ' " --ignore " . s:surround_in_single_quotes(v:val) . " " ' ))
+    let l:glob_fmt = ' --glob !' " format to ignore a pattern. leading space matters
+    return l:glob_fmt . join(map(copy(a:pattern), 's:single_quote(v:val)'), l:glob_fmt)
 endfunction
-
 
 let s:nv_ignore_pattern = exists('g:nv_ignore_pattern') ? s:ignore_list_to_str(g:nv_ignore_pattern) : ''
 
