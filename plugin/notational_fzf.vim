@@ -1,3 +1,4 @@
+"============================== Utility functions =============================
 function! s:escape(path)
   return escape(a:path, ' $%#''"\')
 endfunction
@@ -6,11 +7,14 @@ function! s:double_quote(str)
     return '"' . a:str . '"'
 endfunction
 
+function! s:single_quote(str)
+    return "'" . a:str . "'"
+endfunction
 
 "============================== User settings ==============================
 
 if !exists('g:nv_directories')
-    echomsg 'g:nv_directories is not defined'
+    echoerr 'g:nv_directories is not defined'
     finish
 endif
 
@@ -24,11 +28,9 @@ let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
 " does hard wraps at 72 characters.
 let s:preview_width = exists('g:nv_preview_width') ? string(float2nr(str2float(g:nv_preview_width) / 100.0 * &columns)) : ''
 
-
 " Valid options are ['up', 'down', 'right', 'left']. Default is 'right'. No colon for
 " this command since it's first in the list.
 let s:preview_direction = get(g:,'nv_preview_direction', 'right')
-
 
 " Expand all directories and add trailing slash to avoid issues later.
 let s:dirs = map(copy(g:nv_directories), 'expand(v:val)')
@@ -53,7 +55,6 @@ let s:keymap = extend(s:keymap, {
 
 " FZF expect comma sep str
 let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []), ',')
-
 
 "================================ Short Pathnames ==========================
 
@@ -112,7 +113,6 @@ function! s:handler(lines) abort
    endfor
 
 endfunction
-
 
 " If the file you're looking for is empty, then why does it even exist? It's a
 " note. Just type its name. Hence we ignore lines with only space characters,
