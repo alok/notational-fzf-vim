@@ -121,22 +121,21 @@ endfunction
 " Use a big ugly option list. The '.. ' is because fzf wants a term of the
 " form 'N.. ' where N is a number.
 
-" Use backslash in front of 'ag' to ignore aliases.
-
+" Use backslash in front of 'rg' to ignore aliases.
 command! -nargs=* -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
-              \ 'source': '\ag --hidden --nomultiline --nocolor ' .
+              \ 'source': '\rg --hidden --column  --color never ' .
                   \ s:nv_ignore_pattern  .
-                  \ ' --nogroup --filename ' .
+                  \ ' --no-heading --with-filename ' .
                   \ ((<q-args> is '') ? '-F " "' : s:double_quote(<q-args>)) .
                   \ ' 2>/dev/null ' .
                   \ join(map(copy(s:dirs), 's:escape(v:val)')) .
                   \ ' 2>/dev/null ' . s:format_path_expr  . ' 2>/dev/null ' ,
-              \ 'options': '--print-query --ansi --multi --exact ' .
+              \ 'options': '--print-query --multi --exact ' .
                   \ ' --delimiter=":" --with-nth=' . s:filepath_index .
-                  \ ' --tiebreak=length,begin,index ' .
+                  \ ' --tiebreak=length,begin ' .
                   \ ' --expect=' . s:expect_keys .
                   \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
                   \ ' --color hl:68,hl+:110 ' .
