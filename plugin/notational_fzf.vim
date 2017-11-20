@@ -43,9 +43,9 @@ let s:create_note_key = get(g:, 'nv_create_note_key', 'ctrl-x')
 let s:create_note_window = get(g:, 'nv_create_note_window', 'vertical split ')
 
 let s:keymap = get(g:, 'nv_keymap',
-            \ {'ctrl-s': 'split ',
-            \ 'ctrl-v': 'vertical split ',
-            \ 'ctrl-t': 'tabedit ',
+            \ {'ctrl-s': 'split',
+            \ 'ctrl-v': 'vertical split',
+            \ 'ctrl-t': 'tabedit',
             \ })
 
 " Use `extend` in case user overrides default keys
@@ -60,12 +60,12 @@ let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []), ',')
 
 " Can't be default since python3 is required for it to work
 if get(g:, 'nv_use_short_pathnames', 0)
-    let s:filepath_index = '3.. '
-    let s:python_executable = executable('pypy3') ? ' pypy3 ' : ' python3 '
-    let s:format_path_expr = ' | ' . s:python_executable . ' -S ' . fnameescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py') . ' '
-    let s:highlight_path_expr = s:python_executable  . ' -S ' . fnameescape(expand('<sfile>:p:h:h') . '/print_lines.py') . ' {2} {1} '
+    let s:filepath_index = '3..'
+    let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'
+    let s:format_path_expr = join(['|', s:python_executable, '-S', fnameescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py'),])
+    let s:highlight_path_expr = join([s:python_executable  , '-S', fnameescape(expand('<sfile>:p:h:h') . '/print_lines.py') . ' {2} {1} ',])
 else
-    let s:filepath_index = '1.. '
+    let s:filepath_index = '1..'
     let s:format_path_expr = ''
 endif
 
@@ -90,7 +90,7 @@ function! s:handler(lines) abort
    let query    = a:lines[0]
    let keypress = a:lines[1]
    " `edit` is fallback in case something goes wrong
-   let cmd = get(s:keymap, keypress, 'edit ')
+   let cmd = get(s:keymap, keypress, 'edit')
    " Preprocess candidates here. expect lines to have fmt
    " filename:linenum:content
 
@@ -109,7 +109,7 @@ function! s:handler(lines) abort
    endif
 
    for candidate in candidates
-       execute cmd . ' ' . candidate
+       execute join([cmd, candidate])
    endfor
 
 endfunction
@@ -126,20 +126,49 @@ command! -nargs=* -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
-              \ 'source': '\rg --hidden --column  --color never ' .
-                  \ s:nv_ignore_pattern  .
-                  \ ' --no-heading --with-filename ' .
-                  \ ((<q-args> is '') ? '-F " "' : s:double_quote(<q-args>)) .
-                  \ ' 2>/dev/null ' .
-                  \ join(map(copy(s:dirs), 's:escape(v:val)')) .
-                  \ ' 2>/dev/null ' . s:format_path_expr  . ' 2>/dev/null ' ,
-              \ 'options': '--print-query --multi --exact ' .
-                  \ ' --delimiter=":" --with-nth=' . s:filepath_index .
-                  \ ' --tiebreak=length,begin ' .
-                  \ ' --expect=' . s:expect_keys .
-                  \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
-                  \ ' --color hl:68,hl+:110 ' .
-                  \ ' --preview=' . s:double_quote(s:highlight_path_expr) .
-                  \ ' --preview-window=' . join([s:preview_direction ,  s:preview_width ,  s:wrap_text ,  s:show_preview]) . ' ',
-              \ }
-      \ ))
+              \ 'source': join([
+                  \ '\rg',
+                   \ '--hidden',
+                   \ '--column',
+                   \ '--color never',
+                   \ s:nv_ignore_pattern,
+                   \ '--no-heading',
+                   \ '--with-filename',
+                   \ ((<q-args> is '') ?
+                       \ '-F " " ' :
+                       \ s:double_quote(<q-args>)),
+                   \ '2>/dev/null',
+                   \ join(map(copy(s:dirs), 's:escape(v:val)')) ,
+                   \ '2>/dev/null',
+                   \ s:format_path_expr,
+                   \ '2>/dev/null',
+                   \ ]),
+                   \
+              \ 'options': join([
+                               \ '--print-query',
+                               \ '--multi',
+                               \ '--exact ' ,
+                               \ '--delimiter=":"',
+                               \ '--with-nth=' . s:filepath_index ,
+                               \ '--tiebreak=' . 'length,begin' ,
+                               \ '--expect=' . s:expect_keys ,
+                               \ '--bind=' .  join([
+                                                \ 'alt-a:select-all',
+                                                \ 'alt-d:deselect-all',
+                                                \ 'alt-p:toggle-preview',
+                                                \ 'alt-u:page-up',
+                                                \ 'alt-d:page-down',
+                                                \ 'ctrl-w:backward-kill-word',
+                                                \], ','),
+                               \ '--color=' . join([
+                                                \ 'hl:68',
+                                                \ 'hl+:110'
+                                                \ ], ',') ,
+                               \ '--preview=' . s:double_quote(s:highlight_path_expr) ,
+                               \ '--preview-window=' . join([
+                                                         \ s:preview_direction,
+                                                         \ s:preview_width,
+                                                         \ s:wrap_text,
+                                                         \ s:show_preview
+                                                         \])
+                               \ ])}))
