@@ -77,10 +77,6 @@ endfunction
 
 let s:nv_ignore_pattern = exists('g:nv_ignore_pattern') ? s:ignore_list_to_str(g:nv_ignore_pattern) : ''
 
-
-"============================== Other settings ===========================
-let s:highlight_format = has('termguicolors') ? 'truecolor' : 'xterm256'
-
 "============================== Handler Function ===========================
 
 function! s:handler(lines) abort
