@@ -3,7 +3,7 @@
 ***Loosen the mental blockages to recording information. Scrape away the
 tartar of convention that handicaps its retrieval.***
 
-— [Notational Velocity home page](http://notational.net/)
+--- [Notational Velocity home page](http://notational.net/)
 
 ## Usage
 
@@ -80,8 +80,7 @@ since it's just a wrapper over `fzf`.
 
 ## Dependencies
 
-`ag` is required for its fast search. I'm not planning on changing this
-anytime soon.
+`rg` is required for its fast search.
 
 -   [`fzf`](https://github.com/junegunn/fzf).
 
@@ -93,14 +92,14 @@ anytime soon.
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     ```
 
--   [`ag`](https://github.com/ggreer/the_silver_searcher)
+-   [`rg`](https://github.com/BurntSushi/ripgrep)
 
-## Optional Dependencies
+-   Python 3.5 or higher, for the preview window and filepath
+    shortening.
 
--   [`coderay`](https://github.com/rubychan/coderay), for the ability to
-    preview files, with syntax highlighting.
--   [`highlight`](http://www.andre-simon.de/doku/highlight/en/highlight.html).
-    Will be used instead of `coderay` if available.
+## Optional dependencies
+
+-   Pypy 3, for a potential speedup
 
 ## Required Settings
 
@@ -112,15 +111,14 @@ Remember that these can be relative links.
 
 ``` {.vim}
 " example
-let g:nv_directories = ['~/wiki', '~/writing', '~/code', 'docs.md' ,
-'./notes.md']
+let g:nv_directories = ['~/wiki', '~/writing', '~/code', 'docs.md' , './notes.md']
 ```
 
 ## Detailed Usage
 
-This plugin unites searching and file creation. It defines a command
-`:NV`, which can take 0 or more arguments, which are interpreted as
-regexes.
+This plugin unites searching and file creation. It defines a single
+command `:NV`, which can take 0 or more arguments, which are interpreted
+as regexes.
 
 Type `:NV` or bind it to a mapping to bring up a fuzzy search menu. Type
 in your search terms and it will fuzzy search for them.
@@ -144,14 +142,13 @@ Note that the following options can be customized.
 -   `c-t`: Open in new tab
 -   `<Enter>`: Open highlighted search result in current buffer
 
-The first few lines of the selected file will be visible in a preview
-window.
+The lines around the selected file will be visible in a preview window.
 
 ## Mappings
 
-This plugin defines a command `:NV`, and if you want a mapping for it,
-then you can define it yourself. This is intentionally not done by
-default. You should use whatever mapping or mappings work best for you.
+This plugin only defines a command `:NV`, and if you want a mapping for
+it, you can define it yourself. This is intentionally not done by
+default. You should use whatever mapping(s) work best for you.
 
 For example,
 
@@ -164,7 +161,7 @@ nnoremap <silent> <c-s> :NV<CR>
 You can shorten pathnames by setting `g:nv_use_short_pathnames = 1`.
 
 You can toggle displaying the preview window by pressing `alt-p`. This
-is handy on smaller screens. If yourself don't want to show the window
+is handy on smaller screens. If yourself don't want to show the preview
 by default, set `g:nv_show_preview = 0`.
 
 ``` {.vim}
@@ -177,7 +174,8 @@ let g:nv_main_directory = g:nv_directories[0]
 
 " Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
 " 'command' or 'alt-KEY' : 'command'. See examples below.
-let g:nv_keymap = {'ctrl-s': 'split ',
+let g:nv_keymap = {
+                    \ 'ctrl-s': 'split ',
                     \ 'ctrl-v': 'vertical split ',
                     \ 'ctrl-t': 'tabedit ',
                     \ })
@@ -226,12 +224,6 @@ how this plugin handles input but like how it wraps everything else. It
     `g:nv_directories` so you can always see/update the documentation of
     your current project and keep up-to-date personal notes.
 
-## FAQ
-
-Q: I get an error updating with `vim-plug`.
-
-A: Remove the plugin with `:PlugClean` and re-run `:PlugInstall`.
-
 ## Philosophy
 
 To quote [scrod](https://github.com/scrod/nv/issues/22),
@@ -260,10 +252,6 @@ This plug-in attempts to abstract the operation of note-taking over
 directory.
 
 ## Caveat Emptor
-
--   There is no Simplenote syncing, and there never will be. I use plain
-    text files synced over services like Dropbox for my notes, and I
-    don't plan on changing that anytime soon.
 
 -   This plugin is just a wrapper over FZF that can view directories and
     open/create files. That's all it's ever meant to be. Anything else

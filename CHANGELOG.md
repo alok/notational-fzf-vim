@@ -1,3 +1,10 @@
+## 1.0.0
+
+- [rg](https://github.com/BurntSushi/ripgrep) is now required. `ag` will no longer work.
+- The preview feature has been reworked. Now, the preview window will show
+  several lines of context around the currently selected line.
+
+
 ## 0.8.0
 
 -   New default for preview window that sensibly sets width. Most users
