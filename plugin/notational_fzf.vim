@@ -2,6 +2,10 @@ function! s:escape(path)
   return escape(a:path, ' $%#''"\')
 endfunction
 
+function! s:double_quote(str)
+    return '"' . a:str . '"'
+endfunction
+
 
 "============================== User settings ==============================
 
@@ -135,7 +139,7 @@ command! -nargs=* -bang NV
               \ 'source': '\ag --hidden --nomultiline --nocolor ' .
                   \ s:nv_ignore_pattern  .
                   \ ' --nogroup --filename ' .
-                  \ (<q-args> ==? '' ? '-F " "' : '"' . <q-args> . '"') .
+                  \ ((<q-args> is '') ? '-F " "' : s:double_quote(<q-args>)) .
                   \ ' 2>/dev/null ' .
                   \ join(map(copy(s:dirs), 's:escape(v:val)')) .
                   \ ' 2>/dev/null ' . s:format_path_expr  . ' 2>/dev/null ' ,
@@ -145,7 +149,7 @@ command! -nargs=* -bang NV
                   \ ' --expect=' . s:expect_keys .
                   \ ' --bind alt-a:select-all,alt-d:deselect-all,alt-p:toggle-preview,alt-u:page-up,alt-d:page-down,ctrl-w:backward-kill-word ' .
                   \ ' --color hl:68,hl+:110 ' .
-                  \ ' --preview "(highlight --quiet --force --out-format=' . s:highlight_format . ' --style solarized-dark -l {1} || coderay {1} || cat {1}) 2> /dev/null | head -' . &lines . '" ' .
+                  \ ' --preview=' . s:double_quote(s:highlight_path_expr) .
                   \ ' --preview-window=' . join([s:preview_direction ,  s:preview_width ,  s:wrap_text ,  s:show_preview]) . ' ',
               \ }
       \ ))
