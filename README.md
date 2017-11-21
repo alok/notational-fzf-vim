@@ -80,10 +80,9 @@ since it's just a wrapper over `fzf`.
 
 ## Dependencies
 
-`rg` is required for its fast search.
-
+-   [`rg`](https://github.com/BurntSushi/ripgrep) is required for its
+    fast search.
 -   [`fzf`](https://github.com/junegunn/fzf).
-
 -   `fzf` Vim plugin. Install the Vim plugin that comes with `fzf`,
     which can be done like so if you use
     [vim-plug](https://github.com/junegunn/vim-plug).
@@ -91,8 +90,6 @@ since it's just a wrapper over `fzf`.
     ``` {.vim}
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     ```
-
--   [`rg`](https://github.com/BurntSushi/ripgrep)
 
 -   Python 3.5 or higher, for the preview window and filepath
     shortening.
@@ -104,8 +101,7 @@ since it's just a wrapper over `fzf`.
 ## Required Settings
 
 You have to define a list of directories **or** files (which all must be
-strings) to search. This setting is named `g:nv_directories` for
-backward compatibility.
+strings) to search. This setting is named `g:nv_directories`.
 
 Remember that these can be relative links.
 
@@ -124,9 +120,9 @@ Type `:NV` or bind it to a mapping to bring up a fuzzy search menu. Type
 in your search terms and it will fuzzy search for them.
 
 You can type `:NV` to see all results, and then filter them with FZF.
-You can type `:NV unit testing` to restrict your initial search to lines
-that contain the phrase `python`. `:NV [0-9] [0-9]` will find all
-numbers separated by a space. You know, regexes.
+You can type `:NV python` to restrict your initial search to lines that
+contain the phrase `python`. `:NV [0-9] [0-9]` will find all numbers
+separated by a space. You know, regexes.
 
 It does not search in a fully fuzzy fashion because that's less useful
 for prose. It looks for full words, but they don't have to be next to
