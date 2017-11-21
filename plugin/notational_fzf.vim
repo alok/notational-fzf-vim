@@ -127,7 +127,9 @@ command! -nargs=* -bang NV
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
               \ 'source': join([
-                  \ '\rg',
+                   \ 'command',
+                   \ 'rg',
+                   \ '--follow',
                    \ '--hidden',
                    \ '--column',
                    \ '--color never',
@@ -147,7 +149,7 @@ command! -nargs=* -bang NV
               \ 'options': join([
                                \ '--print-query',
                                \ '--multi',
-                               \ '--exact ' ,
+                               \ '--exact',
                                \ '--delimiter=":"',
                                \ '--with-nth=' . s:filepath_index ,
                                \ '--tiebreak=' . 'length,begin' ,
@@ -159,16 +161,16 @@ command! -nargs=* -bang NV
                                                 \ 'alt-u:page-up',
                                                 \ 'alt-d:page-down',
                                                 \ 'ctrl-w:backward-kill-word',
-                                                \], ','),
+                                                \ ], ','),
                                \ '--color=' . join([
                                                 \ 'hl:68',
-                                                \ 'hl+:110'
+                                                \ 'hl+:110',
                                                 \ ], ',') ,
                                \ '--preview=' . s:double_quote(s:highlight_path_expr) ,
                                \ '--preview-window=' . join([
                                                          \ s:preview_direction,
                                                          \ s:preview_width,
                                                          \ s:wrap_text,
-                                                         \ s:show_preview
-                                                         \])
+                                                         \ s:show_preview,
+                                                         \ ])
                                \ ])}))
