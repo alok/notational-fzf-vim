@@ -5,13 +5,6 @@ import os
 import sys
 from pathlib import PurePath
 
-
-def expand_path(path: str) -> str:
-    ''' Expand tilde and return absolute path. '''
-
-    return os.path.abspath(path)
-
-
 # These are floated to the top so they aren't recalculated every loop.  The
 # most restrictive replacements should come earlier.
 REPLACEMENTS = ('', os.pardir, '~')
@@ -61,7 +54,7 @@ def process_line(line: str) -> None:
     filename, linenum, contents = line.split(sep=':', maxsplit=2)
 
     # Normalize path for further processing.
-    filename = expand_path(filename)
+    filename = os.path.abspath(filename)
 
     # Drop trailing newline.
     contents = contents.rstrip()
