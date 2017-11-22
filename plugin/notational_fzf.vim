@@ -19,6 +19,11 @@ if !exists('g:nv_directories')
 endif
 
 let s:ext = get(g:, 'nv_default_extension', '.md')
+
+" Valid options are ['up', 'down', 'right', 'left']. Default is 'right'. No colon for
+" this command since it's first in the list.
+let s:preview_direction = get(g:, 'nv_preview_direction', 'right')
+
 let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? 'wrap' : ''
 
 " Show preview unless user set it to be hidden
@@ -27,10 +32,6 @@ let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
 " How wide to make preview window. 72 characters is default because pandoc
 " does hard wraps at 72 characters.
 let s:preview_width = exists('g:nv_preview_width') ? string(float2nr(str2float(g:nv_preview_width) / 100.0 * &columns)) : ''
-
-" Valid options are ['up', 'down', 'right', 'left']. Default is 'right'. No colon for
-" this command since it's first in the list.
-let s:preview_direction = get(g:,'nv_preview_direction', 'right')
 
 " Expand all directories and add trailing slash to avoid issues later.
 let s:dirs = map(copy(g:nv_directories), 'expand(v:val)')
@@ -140,12 +141,13 @@ command! -nargs=* -bang NV
                    \ '--hidden',
                    \ '--line-number',
                    \ '--color never',
+                   \ '--no-messages',
                    \ s:nv_ignore_pattern,
                    \ '--no-heading',
                    \ '--with-filename',
                    \ ((<q-args> is '') ?
-                       \ '-F " " ' :
-                       \ s:double_quote(<q-args>)),
+                     \ '-F " " ' :
+                     \ s:double_quote(<q-args>)),
                    \ '2>/dev/null',
                    \ join(map(copy(s:dirs), 's:escape(v:val)')) ,
                    \ '2>/dev/null',
@@ -158,27 +160,30 @@ command! -nargs=* -bang NV
                                \ '--ansi',
                                \ '--multi',
                                \ '--exact',
+                               \ '--inline-info',
                                \ '--delimiter=":"',
                                \ '--with-nth=' . s:display_start_index ,
                                \ '--tiebreak=' . 'length,begin' ,
                                \ '--expect=' . s:expect_keys ,
                                \ '--bind=' .  join([
-                                                \ 'alt-a:select-all',
-                                                \ 'alt-d:deselect-all',
-                                                \ 'alt-p:toggle-preview',
-                                                \ 'alt-u:page-up',
-                                                \ 'alt-d:page-down',
-                                                \ 'ctrl-w:backward-kill-word',
-                                                \ ], ','),
+                                              \ 'alt-a:select-all',
+                                              \ 'alt-d:deselect-all',
+                                              \ 'alt-p:toggle-preview',
+                                              \ 'alt-u:page-up',
+                                              \ 'alt-d:page-down',
+                                              \ 'ctrl-w:backward-kill-word',
+                                              \ ], ','),
                                \ '--color=' . join([
-                                                \ 'hl:68',
-                                                \ 'hl+:110',
-                                                \ ], ',') ,
+                                              \ 'hl:68',
+                                              \ 'hl+:110',
+                                              \ ], ',') ,
                                \ '--preview=' . s:double_quote(s:highlight_path_expr) ,
-                               \ '--preview-window=' . join([
-                                                         \ s:preview_direction,
-                                                         \ s:preview_width,
-                                                         \ s:wrap_text,
-                                                         \ s:show_preview,
-                                                         \ ])
+                               \ '--preview-window=' . join(filter(copy([
+                                                                   \ s:preview_direction,
+                                                                   \ s:preview_width,
+                                                                   \ s:wrap_text,
+                                                                   \ s:show_preview,
+                                                                   \ ]),
+                                                            \ 'v:val != "" ')
+                                                       \ ,':')
                                \ ])}))
