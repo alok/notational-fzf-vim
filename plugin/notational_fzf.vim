@@ -69,7 +69,8 @@ if s:use_short_pathnames
     " After piping through the Python script, our format is
     " filename:linum:shortname:linenum:contents, so we start at index 3 to
     " avoid displaying the long pathname
-    let s:display_start_index = '3..'
+    " Don't show line numbers
+    let s:display_start_index = '3,5..'
 else
     let s:format_path_expr = ''
     " Since we don't pipe through the python script, our data format is
