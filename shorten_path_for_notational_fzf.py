@@ -9,7 +9,7 @@ from pathlib import PurePath
 def expand_path(path: str) -> str:
     ''' Expand tilde and return absolute path. '''
 
-    return os.path.abspath(os.path.expanduser(path))
+    return os.path.abspath(path)
 
 
 # These are floated to the top so they aren't recalculated every loop
