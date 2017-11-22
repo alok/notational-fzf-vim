@@ -21,7 +21,7 @@ def prettyprint_path(path: str, old_path: str, replacement: str) -> str:
     # Pretty print the path prefix
     path = path.replace(old_path, replacement, 1)
     # Truncate the rest of the path to a single character.
-    short_path = os.path.join(replacement, * [x[0] for x in PurePath(path).parts[1:]])
+    short_path = os.path.join(replacement, *[x[0] for x in PurePath(path).parts[1:]])
     return short_path
 
 
@@ -40,7 +40,7 @@ def shorten(path: str) -> str:
 
     # If no replacement was found, shorten the entire path.
     else:
-        short_path = os.path.join(* [x[0] for x in PurePath(path).parts])
+        short_path = os.path.join(*[x[0] for x in PurePath(path).parts])
 
     return os.path.join(short_path, filename)
 
@@ -56,7 +56,7 @@ def color(line, color):
 
 
 def process_line(line: str) -> None:
-    # Expected format is colon separated `name:linenum:contents`
+    # Expected format is colon separated `name:line number:contents`
     filename, linenum, contents = line.split(sep=':', maxsplit=2)
 
     # Normalize path for further processing.
@@ -81,4 +81,3 @@ def process_line(line: str) -> None:
 if __name__ == '__main__':
     for line in sys.stdin:
         process_line(line)
-
