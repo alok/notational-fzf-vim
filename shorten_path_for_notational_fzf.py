@@ -19,7 +19,8 @@ def prettyprint_path(path: str, old_path: str, replacement: str) -> str:
     return short_path
 
 
-def shorten(path: str) -> str:
+def shorten(path: str):
+    """returns 2 strings, the shortened parent directory and the filename"""
     # We don't want to shorten the filename, just its parent directory, so we
     # `split()` and just shorten `path`.
     path, filename = os.path.split(path)
@@ -36,13 +37,21 @@ def shorten(path: str) -> str:
     else:
         short_path = os.path.join(*[x[0] for x in PurePath(path).parts])
 
-    return os.path.join(short_path, filename)
+    return short_path, filename
 
 
 GREEN = '\033[32m'
-PINK = '\033[35m'
+PURPLE = '\033[35m'  # looks pink to me
+CYAN = '\033[36m'
 
 RESET = '\033[0m'
+
+# RED = '\033[31m'
+# BLUE = '\033[34m'
+# LIGHTRED = '\033[91m'
+# YELLOW = '\033[93m'
+# LIGHTBLUE = '\033[94m'
+# LIGHTCYAN = '\033[96m'
 
 
 def color(line, color):
@@ -59,11 +68,22 @@ def process_line(line: str) -> None:
     # Drop trailing newline.
     contents = contents.rstrip()
 
+    shortened_parent, basename = shorten(filename)
+    # The conditional is to avoid a leading slash if the parent is replaced
+    # with an empty directory. The slash is manually colored because otherwise
+    # `os.path.join` won't do it.
+    if shortened_parent:
+        colored_short_name = color(shortened_parent + '/', CYAN)
+    else:
+        colored_short_name = ''
+
+    colored_short_name += color(basename, PURPLE)
+
     # Format is: long form, line number, short form, line number, rest of line. This is so Vim can process it.
     formatted_line = ':'.join([
-        color(filename, PINK),
+        color(filename, PURPLE),
         color(linenum, GREEN),
-        color(shorten(filename), PINK),
+        colored_short_name,
         color(linenum, GREEN),
         contents,
     ])
