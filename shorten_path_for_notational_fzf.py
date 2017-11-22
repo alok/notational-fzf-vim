@@ -45,6 +45,16 @@ def shorten(path: str) -> str:
     return os.path.join(short_path, filename)
 
 
+GREEN = '\033[32m'
+PINK = '\033[35m'
+
+RESET = '\033[0m'
+
+
+def color(line, color):
+    return color + line + RESET
+
+
 def process_line(line: str) -> None:
     # Expected format is colon separated `name:linenum:contents`
     filename, linenum, contents = line.split(sep=':', maxsplit=2)
@@ -55,8 +65,14 @@ def process_line(line: str) -> None:
     # Drop trailing newline.
     contents = contents.rstrip()
 
-    # Format is: long form, short form, rest of line. This is so Vim can process it.
-    formatted_line = ':'.join([filename, linenum] + [shorten(filename), linenum] + [contents])
+    # Format is: long form, line number, short form, line number, rest of line. This is so Vim can process it.
+    formatted_line = ':'.join([
+        color(filename, PINK),
+        color(linenum, GREEN),
+        color(shorten(filename), PINK),
+        color(linenum, GREEN),
+        contents,
+    ])
 
     # We print the long and short forms, and one form is picked in the Vim script that uses this.
     print(formatted_line)
