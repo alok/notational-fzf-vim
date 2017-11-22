@@ -131,7 +131,7 @@ command! -nargs=* -bang NV
                    \ 'rg',
                    \ '--follow',
                    \ '--hidden',
-                   \ '--column',
+                   \ '--line-number',
                    \ '--color never',
                    \ s:nv_ignore_pattern,
                    \ '--no-heading',
