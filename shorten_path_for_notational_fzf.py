@@ -12,9 +12,10 @@ def expand_path(path: str) -> str:
     return os.path.abspath(path)
 
 
-# These are floated to the top so they aren't recalculated every loop
+# These are floated to the top so they aren't recalculated every loop.  The
+# most restrictive replacements should come earlier.
 REPLACEMENTS = ('', os.pardir, '~')
-old_paths = [expand_path(replacement) for replacement in REPLACEMENTS]
+old_paths = [os.path.abspath(os.path.expanduser(replacement)) for replacement in REPLACEMENTS]
 
 
 def prettyprint_path(path: str, old_path: str, replacement: str) -> str:
