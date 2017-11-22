@@ -1,3 +1,7 @@
+## 1.1.0
+
+- Color filenames and line numbers.
+
 ## 1.0.0
 
 - [rg](https://github.com/BurntSushi/ripgrep) is now required. `ag` will no longer work.
