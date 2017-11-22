@@ -58,15 +58,22 @@ let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []), ',')
 
 "================================ Short Pathnames ==========================
 
+let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', 0)
+
 " Can't be default since python3 is required for it to work
-if get(g:, 'nv_use_short_pathnames', 0)
-    let s:filepath_index = '3..'
+if s:use_short_pathnames
     let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'
     let s:format_path_expr = join(['|', s:python_executable, '-S', fnameescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py'),])
     let s:highlight_path_expr = join([s:python_executable  , '-S', fnameescape(expand('<sfile>:p:h:h') . '/print_lines.py') . ' {2} {1} ',])
+    " After piping through the Python script, our format is
+    " filename:linum:shortname:linenum:contents, so we start at index 3 to
+    " avoid displaying the long pathname
+    let s:display_start_index = '3..'
 else
-    let s:filepath_index = '1..'
     let s:format_path_expr = ''
+    " Since we don't pipe through the python script, our data format is
+    " filename:linenum:contents, so we start at 1.
+    let s:display_start_index = '1..'
 endif
 
 "============================ Ignore patterns ==============================
@@ -148,10 +155,11 @@ command! -nargs=* -bang NV
                    \
               \ 'options': join([
                                \ '--print-query',
+                               \ '--ansi',
                                \ '--multi',
                                \ '--exact',
                                \ '--delimiter=":"',
-                               \ '--with-nth=' . s:filepath_index ,
+                               \ '--with-nth=' . s:display_start_index ,
                                \ '--tiebreak=' . 'length,begin' ,
                                \ '--expect=' . s:expect_keys ,
                                \ '--bind=' .  join([
