@@ -166,16 +166,12 @@ command! -nargs=* -bang NV
                                \ '--expect=' . s:expect_keys ,
                                \ '--bind=' .  join([
                                               \ 'alt-a:select-all',
-                                              \ 'alt-d:deselect-all',
+                                              \ 'alt-q:deselect-all',
                                               \ 'alt-p:toggle-preview',
                                               \ 'alt-u:page-up',
                                               \ 'alt-d:page-down',
                                               \ 'ctrl-w:backward-kill-word',
                                               \ ], ','),
-                               \ '--color=' . join([
-                                              \ 'hl:68',
-                                              \ 'hl+:110',
-                                              \ ], ',') ,
                                \ '--preview=' . s:double_quote(s:highlight_path_expr) ,
                                \ '--preview-window=' . join(filter(copy([
                                                                    \ s:preview_direction,
@@ -186,3 +182,6 @@ command! -nargs=* -bang NV
                                                             \ 'v:val != "" ')
                                                        \ ,':')
                                \ ])}))
+
+
+
