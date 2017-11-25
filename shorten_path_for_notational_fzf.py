@@ -1,21 +1,22 @@
 #!/usr/bin/env pypy3
 # encoding: utf-8
 
-import os
 import sys
+from os import pardir, sep
+from os.path import abspath, expanduser, join, split
 from pathlib import PurePath
 
 # These are floated to the top so they aren't recalculated every loop.  The
 # most restrictive replacements should come earlier.
-REPLACEMENTS = ('', os.pardir, '~')
-old_paths = [os.path.abspath(os.path.expanduser(replacement)) for replacement in REPLACEMENTS]
+REPLACEMENTS = ('', pardir, '~')
+old_paths = [abspath(expanduser(replacement)) for replacement in REPLACEMENTS]
 
 
 def prettyprint_path(path: str, old_path: str, replacement: str) -> str:
     # Pretty print the path prefix
     path = path.replace(old_path, replacement, 1)
     # Truncate the rest of the path to a single character.
-    short_path = os.path.join(replacement, *[x[0] for x in PurePath(path).parts[1:]])
+    short_path = join(replacement, *[x[0] for x in PurePath(path).parts[1:]])
     return short_path
 
 
@@ -23,7 +24,7 @@ def shorten(path: str):
     """returns 2 strings, the shortened parent directory and the filename"""
     # We don't want to shorten the filename, just its parent directory, so we
     # `split()` and just shorten `path`.
-    path, filename = os.path.split(path)
+    path, filename = split(path)
 
     # use empty replacement for current directory. it expands correctly
 
@@ -35,7 +36,7 @@ def shorten(path: str):
 
     # If no replacement was found, shorten the entire path.
     else:
-        short_path = os.path.join(*[x[0] for x in PurePath(path).parts])
+        short_path = join(*[x[0] for x in PurePath(path).parts])
 
     return short_path, filename
 
@@ -58,15 +59,15 @@ def color(line, color):
     return color + line + RESET
 
 
-def process_line(line: str) -> None:
+def process_line(line: str) -> str:
     # Expected format is colon separated `name:line number:contents`
     filename, linenum, contents = line.split(sep=':', maxsplit=2)
 
-    # Normalize path for further processing.
-    filename = os.path.abspath(filename)
-
     # Drop trailing newline.
     contents = contents.rstrip()
+
+    # Normalize path for further processing.
+    filename = abspath(filename)
 
     shortened_parent, basename = shorten(filename)
     # The conditional is to avoid a leading slash if the parent is replaced
@@ -87,11 +88,11 @@ def process_line(line: str) -> None:
         color(linenum, GREEN),
         contents,
     ])
+    return formatted_line
 
     # We print the long and short forms, and one form is picked in the Vim script that uses this.
-    print(formatted_line)
-
+    # print(formatted_line)
 
 if __name__ == '__main__':
     for line in sys.stdin:
-        process_line(line)
+        print(process_line(line))
