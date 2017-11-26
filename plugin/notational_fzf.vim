@@ -1,11 +1,7 @@
 "============================== Utility functions =============================
-function! s:escape(path)
-  return escape(a:path, ' $%#''"\')
-endfunction
 
-function! s:double_quote(str)
-    return '"' . a:str . '"'
-endfunction
+" XXX: fnameescape vs. shellescape: for vim's consumption vs. the shell's
+" consumption
 
 function! s:single_quote(str)
     return "'" . a:str . "'"
@@ -13,9 +9,17 @@ endfunction
 
 "============================== User settings ==============================
 
-if !exists('g:nv_directories')
-    echoerr 'g:nv_directories is not defined'
+
+if !exists('g:nv_search_paths')
+
+    if exists('g:nv_directories')
+        echoerr '`g:nv_directories` has been renamed `g:nv_search_paths`. Please update your config files.'
+    else
+        echoerr '`g:nv_search_paths` is not defined.'
+    endif
+
     finish
+
 endif
 
 let s:ext = get(g:, 'nv_default_extension', '.md')
@@ -33,10 +37,29 @@ let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
 " does hard wraps at 72 characters.
 let s:preview_width = exists('g:nv_preview_width') ? string(float2nr(str2float(g:nv_preview_width) / 100.0 * &columns)) : ''
 
-" Expand all directories and add trailing slash to avoid issues later.
-let s:dirs = map(copy(g:nv_directories), 'expand(v:val)')
+" Expand all directories and escape metacharacters to avoid issues later.
+let s:search_paths = map(copy(g:nv_search_paths), 'expand(v:val)')
 
-let s:main_dir = get(g:, 'nv_main_directory', s:dirs[0])
+" The `exists()` check needs to be first in case the main directory is not
+" part of `g:nv_search_paths`.
+if exists('g:nv_main_directory')
+    let s:main_dir = g:nv_main_directory
+else
+    for path in s:search_paths
+        if isdirectory(path)
+            let s:main_dir = path
+            break
+        endif
+    endfor
+
+    " this awkward bit of code is to get around the lack of a for-else
+    " loop in vim
+    if !exists('s:main_dir')
+        echoerr 'no directories found in `g:nv_search_paths`'
+    endif
+endif
+
+let s:search_path_str = join(map(copy(s:search_paths), 'shellescape(v:val)'))
 
 "=========================== Keymap ========================================
 
@@ -64,12 +87,12 @@ let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', 0)
 " Can't be default since python3 is required for it to work
 if s:use_short_pathnames
     let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'
-    let s:format_path_expr = join(['|', s:python_executable, '-S', fnameescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py'),])
-    let s:highlight_path_expr = join([s:python_executable  , '-S', fnameescape(expand('<sfile>:p:h:h') . '/print_lines.py') . ' {2} {1} ', '2>/dev/null'])
+    let s:format_path_expr = join([' | ', s:python_executable, '-S', shellescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py'),])
+    let s:highlight_path_expr = join([s:python_executable  , '-S', expand('<sfile>:p:h:h') . '/print_lines.py' , '{2} {1} ', '2>/dev/null',])
     " After piping through the Python script, our format is
     " filename:linum:shortname:linenum:contents, so we start at index 3 to
     " avoid displaying the long pathname
-    " Don't show line numbers
+    " We skip index 4 to avoid showing line numbers
     let s:display_start_index = '3,5..'
 else
     let s:format_path_expr = ''
@@ -81,8 +104,11 @@ endif
 "============================ Ignore patterns ==============================
 
 function! s:ignore_list_to_str(pattern)
-    let l:glob_fmt = ' --glob !' " format to ignore a pattern. leading space matters
-    return l:glob_fmt . join(map(copy(a:pattern), 's:single_quote(v:val)'), l:glob_fmt)
+    "list -> space separated string of glob patterns.
+    " Format to ignore a pattern.
+    " XXX The leading space matters.
+    let l:glob_fmt = ' --glob !'
+    return l:glob_fmt . join(map(copy(a:pattern), 's:single_quote(v:val)'), l:glob_fmt) " prepend glob format string so the first pattern is ignored too.
 endfunction
 
 let s:nv_ignore_pattern = exists('g:nv_ignore_pattern') ? s:ignore_list_to_str(g:nv_ignore_pattern) : ''
@@ -105,7 +131,7 @@ function! s:handler(lines) abort
 
    " Handle creating note.
    if keypress ==? s:create_note_key
-     let candidates = [s:escape(s:main_dir  . '/' . query . s:ext)]
+     let candidates = [shellescape(s:main_dir  . '/' . query . s:ext)]
    else
        let filenames = a:lines[2:]
        let candidates = []
@@ -113,7 +139,7 @@ function! s:handler(lines) abort
            " Don't forget trailing space in replacement.
            let linenum = substitute(filename, '\v.{-}:(\d+):.*$', '+\1 ', '')
            let name = substitute(filename, '\v(.{-}):\d+:.*$', '\1', '')
-           call add(candidates, linenum . s:escape(name))
+           call add(candidates, linenum . shellescape(name))
        endfor
    endif
 
@@ -130,7 +156,9 @@ endfunction
 " Use a big ugly option list. The '.. ' is because fzf wants a term of the
 " form 'N.. ' where N is a number.
 
-" Use backslash in front of 'rg' to ignore aliases.
+" Use `command` in front of 'rg' to ignore aliases.
+" The `' "\S" '` is so that the backslash itself doesn't require escaping.
+" g:search_paths is already shell escaped, so we don't do it again
 command! -nargs=* -bang NV
       \ call fzf#run(
           \ fzf#wrap({
@@ -147,9 +175,9 @@ command! -nargs=* -bang NV
                    \ '--no-heading',
                    \ '--with-filename',
                    \ ((<q-args> is '') ?
-                     \ '-F " " ' :
-                     \ s:double_quote(<q-args>)),
-                   \ join(map(copy(s:dirs), 's:escape(v:val)')) ,
+                     \ ' "\S" ' :
+                     \ shellescape(<q-args>)),
+                   \ s:search_path_str,
                    \ s:format_path_expr,
                    \ '2>/dev/null',
                    \ ]),
@@ -172,7 +200,7 @@ command! -nargs=* -bang NV
                                               \ 'alt-d:page-down',
                                               \ 'ctrl-w:backward-kill-word',
                                               \ ], ','),
-                               \ '--preview=' . s:double_quote(s:highlight_path_expr) ,
+                               \ '--preview=' . shellescape(s:highlight_path_expr) ,
                                \ '--preview-window=' . join(filter(copy([
                                                                    \ s:preview_direction,
                                                                    \ s:preview_width,
@@ -182,6 +210,4 @@ command! -nargs=* -bang NV
                                                             \ 'v:val != "" ')
                                                        \ ,':')
                                \ ])}))
-
-
 

@@ -1,13 +1,20 @@
+## 2.0.0
+
+-   Rename `g:nv_directories` to `g:nv_search_paths`. This emphasizes
+    that you can search directories *and* files.
+-   Use `shellescape` instead of `fnameescape` to avoid path issues.
+-   Fix bug in search that would cause it to ignore 1-line long files.
+
 ## 1.1.0
 
-- Color filenames and line numbers.
+-   Color filenames and line numbers.
 
 ## 1.0.0
 
-- [rg](https://github.com/BurntSushi/ripgrep) is now required. `ag` will no longer work.
-- The preview feature has been reworked. Now, the preview window will show
-  several lines of context around the currently selected line.
-
+-   [rg](https://github.com/BurntSushi/ripgrep) is now required. `ag`
+    will no longer work.
+-   The preview feature has been reworked. Now, the preview window will
+    show several lines of context around the currently selected line.
 
 ## 0.8.0
 

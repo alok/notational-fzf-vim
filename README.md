@@ -29,7 +29,7 @@ Read `CHANGELOG.md`.
 
 Vim is great for writing. But it isn't optimized for note-taking, where
 you often create lots of little notes and frequently change larger notes
-in a separate directory form the one you're working in. For years I used
+in a separate directory from the one you're working in. For years I used
 [nvALT](http://brettterpstra.com/projects/nvalt/) and whenever I had to
 do serious editing, I would open the file in Vim.
 
@@ -101,13 +101,13 @@ since it's just a wrapper over `fzf`.
 ## Required Settings
 
 You have to define a list of directories **or** files (which all must be
-strings) to search. This setting is named `g:nv_directories`.
+strings) to search. This setting is named `g:nv_search_paths`.
 
 Remember that these can be relative links.
 
 ``` {.vim}
 " example
-let g:nv_directories = ['~/wiki', '~/writing', '~/code', 'docs.md' , './notes.md']
+let g:nv_search_paths = ['~/wiki', '~/writing', '~/code', 'docs.md' , './notes.md']
 ```
 
 ## Detailed Usage
@@ -165,8 +165,9 @@ by default, set `g:nv_show_preview = 0`.
 " Don't forget the dot, unless you don't want one.
 let g:nv_default_extension = '.md'
 
-" String. Default is first in directory list.
-let g:nv_main_directory = g:nv_directories[0]
+" String. Default is first directory found in `g:nv_search_paths`. Error thrown
+"if no directory found and g:nv_main_directory is not specified
+"let g:nv_main_directory = g:nv_main_directory or (first directory in g:nv_search_paths)
 
 " Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
 " 'command' or 'alt-KEY' : 'command'. See examples below.
@@ -217,7 +218,7 @@ how this plugin handles input but like how it wraps everything else. It
 -   Add `~/notes` and `~/wiki` so your notes are only one key binding
     away.
 -   Add relative links like `./notes`, `./doc`, etc. to
-    `g:nv_directories` so you can always see/update the documentation of
+    `g:nv_search_paths` so you can always see/update the documentation of
     your current project and keep up-to-date personal notes.
 
 ## Philosophy
