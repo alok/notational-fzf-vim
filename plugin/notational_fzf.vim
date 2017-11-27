@@ -33,8 +33,7 @@ let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? 'wrap' : ''
 " Show preview unless user set it to be hidden
 let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
 
-" How wide to make preview window. 72 characters is default because pandoc
-" does hard wraps at 72 characters.
+" How wide to make preview window. 72 characters is default.
 let s:preview_width = exists('g:nv_preview_width') ? string(float2nr(str2float(g:nv_preview_width) / 100.0 * &columns)) : ''
 
 " Expand all directories and escape metacharacters to avoid issues later.
@@ -131,7 +130,7 @@ function! s:handler(lines) abort
 
    " Handle creating note.
    if keypress ==? s:create_note_key
-     let candidates = [shellescape(s:main_dir  . '/' . query . s:ext)]
+     let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
    else
        let filenames = a:lines[2:]
        let candidates = []
@@ -139,7 +138,9 @@ function! s:handler(lines) abort
            " Don't forget trailing space in replacement.
            let linenum = substitute(filename, '\v.{-}:(\d+):.*$', '+\1 ', '')
            let name = substitute(filename, '\v(.{-}):\d+:.*$', '\1', '')
-           call add(candidates, linenum . shellescape(name))
+           " fnameescape instead of shellescape because the file is consumed
+           " by vim rather than the shell
+           call add(candidates, linenum . fnameescape(name))
        endfor
    endif
 
@@ -200,7 +201,7 @@ command! -nargs=* -bang NV
                                               \ 'alt-d:page-down',
                                               \ 'ctrl-w:backward-kill-word',
                                               \ ], ','),
-                               \ '--preview=' . shellescape(s:highlight_path_expr) ,
+                               \ shellescape('--preview=' . s:highlight_path_expr) ,
                                \ '--preview-window=' . join(filter(copy([
                                                                    \ s:preview_direction,
                                                                    \ s:preview_width,
