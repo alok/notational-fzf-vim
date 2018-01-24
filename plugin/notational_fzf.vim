@@ -87,7 +87,7 @@ let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', 0)
 if s:use_short_pathnames
     let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'
     let s:format_path_expr = join([' | ', s:python_executable, '-S', shellescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py'),])
-    let s:highlight_path_expr =join([s:python_executable  , '-S', expand('<sfile>:p:h:h') . '/print_lines.py' , '{2} {1} ', '2>/dev/null',])
+    let s:highlight_path_expr = join([s:python_executable , '-S', expand('<sfile>:p:h:h') . '/print_lines.py' , '{2} {1} ', '2>/dev/null',])
     " After piping through the Python script, our format is
     " filename:linum:shortname:linenum:contents, so we start at index 3 to
     " avoid displaying the long pathname
