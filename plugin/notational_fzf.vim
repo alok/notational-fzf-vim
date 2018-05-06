@@ -54,7 +54,8 @@ else
     " this awkward bit of code is to get around the lack of a for-else
     " loop in vim
     if !exists('s:main_dir')
-        echoerr 'no directories found in `g:nv_search_paths`'
+        echomsg 'no directories found in `g:nv_search_paths`'
+        finish
     endif
 endif
 
