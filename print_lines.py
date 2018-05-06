@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""Colorize the current line in the preview window in bold red."""
 
 import os
 import shutil

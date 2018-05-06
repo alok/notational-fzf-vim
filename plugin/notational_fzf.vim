@@ -177,7 +177,7 @@ command! -nargs=* -bang NV
                    \ '--no-heading',
                    \ '--with-filename',
                    \ ((<q-args> is '') ?
-                     \ ' "\S" ' :
+                     \ '"\S"' :
                      \ shellescape(<q-args>)),
                    \ s:search_path_str,
                    \ s:format_path_expr,
