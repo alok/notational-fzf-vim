@@ -77,16 +77,16 @@ def process_line(line: str) -> str:
     # with an empty directory. The slash is manually colored because otherwise
     # `os.path.join` won't do it.
     if shortened_parent:
-        colored_short_name = color(shortened_parent + '/', CYAN)
+        colored_short_name = color(shortened_parent + '/', PURPLE)
     else:
         colored_short_name = ''
 
-    colored_short_name += color(basename, PURPLE)
+    colored_short_name += color(basename, CYAN)
 
     # Format is: long form, line number, short form, line number, rest of line. This is so Vim can process it.
     formatted_line = ':'.join(
         [
-            color(filename, PURPLE),
+            color(filename, CYAN),
             color(linenum, GREEN),
             colored_short_name,
             color(linenum, GREEN),
