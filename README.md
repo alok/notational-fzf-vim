@@ -136,6 +136,7 @@ Note that the following options can be customized.
 -   `c-v`: Open in vertical split
 -   `c-s`: Open in horizontal split
 -   `c-t`: Open in new tab
+-   `c-y`: Yank the selected filenames
 -   `<Enter>`: Open highlighted search result in current buffer
 
 The lines around the selected file will be visible in a preview window.
@@ -194,6 +195,12 @@ let g:nv_preview_width = 50
 
 " String. Determines where the preview window is. Valid options are: 'right', 'left', 'up', 'down'.
 let g:nv_preview_direction = 'right'
+
+" String. Yanks the selected filenames to the default register.
+let g:nv_yank_key = 'ctrl-y'
+
+" String. Separator used between yanked filenames.
+let g:nv_yank_separator = "\n"
 
 " Boolean. If set, will truncate each path element to a single character. If
 " you have colons in your pathname, this will fail. Not set by default.

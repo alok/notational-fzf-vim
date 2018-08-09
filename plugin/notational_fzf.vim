@@ -39,6 +39,9 @@ let s:preview_width = exists('g:nv_preview_width') ? string(float2nr(str2float(g
 " Expand all directories and escape metacharacters to avoid issues later.
 let s:search_paths = map(copy(g:nv_search_paths), 'expand(v:val)')
 
+" Separator for yanked files
+let s:yank_separator = get(g:, 'nv_yank_separator', "\n")
+
 " The `exists()` check needs to be first in case the main directory is not
 " part of `g:nv_search_paths`.
 if exists('g:nv_main_directory')
@@ -64,6 +67,7 @@ let s:search_path_str = join(map(copy(s:search_paths), 'shellescape(v:val)'))
 "=========================== Keymap ========================================
 
 let s:create_note_key = get(g:, 'nv_create_note_key', 'ctrl-x')
+let s:yank_key = get(g:, 'nv_yank_key', "ctrl-y")
 let s:create_note_window = get(g:, 'nv_create_note_window', 'vertical split ')
 
 let s:keymap = get(g:, 'nv_keymap',
@@ -79,6 +83,14 @@ let s:keymap = extend(s:keymap, {
 
 " FZF expect comma sep str
 let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []), ',')
+
+"================================ Yank string ==============================
+
+function! s:yank_to_register(data)
+  let @" = a:data
+  silent! let @* = a:data
+  silent! let @+ = a:data
+endfunction
 
 "================================ Short Pathnames ==========================
 
@@ -133,6 +145,10 @@ function! s:handler(lines) abort
    " Handle creating note.
    if keypress ==? s:create_note_key
      let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
+   elseif keypress ==? s:yank_key
+     let pat = '\v(.{-}):\d+:'
+     let hashes = join(filter(map(a:lines[2:], 'matchlist(v:val, pat)[1]'), 'len(v:val)'), s:yank_separator)
+     return s:yank_to_register(hashes)
    else
        let filenames = a:lines[2:]
        let candidates = []
@@ -190,6 +206,7 @@ command! -nargs=* -bang NV
                                \ '--ansi',
                                \ '--multi',
                                \ '--exact',
+                               \ '--expect=ctrl-y',
                                \ '--inline-info',
                                \ '--delimiter=":"',
                                \ '--with-nth=' . s:display_start_index ,
