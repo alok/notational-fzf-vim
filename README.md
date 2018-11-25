@@ -158,8 +158,8 @@ nnoremap <silent> <c-s> :NV<CR>
 You can shorten pathnames by setting `g:nv_use_short_pathnames = 1`.
 
 You can toggle displaying the preview window by pressing `alt-p`. This
-is handy on smaller screens. If yourself don't want to show the preview
-by default, set `g:nv_show_preview = 0`.
+is handy on smaller screens. If you don't want to show the preview by
+default, set `g:nv_show_preview = 0`.
 
 ``` {.vim}
 " String. Set to '' (the empty string) if you don't want an extension appended by default.
@@ -225,8 +225,8 @@ how this plugin handles input but like how it wraps everything else. It
 -   Add `~/notes` and `~/wiki` so your notes are only one key binding
     away.
 -   Add relative links like `./notes`, `./doc`, etc. to
-    `g:nv_search_paths` so you can always see/update the documentation of
-    your current project and keep up-to-date personal notes.
+    `g:nv_search_paths` so you can always see/update the documentation
+    of your current project and keep up-to-date personal notes.
 
 ## Philosophy
 
