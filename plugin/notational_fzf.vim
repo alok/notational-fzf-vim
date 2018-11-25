@@ -147,7 +147,7 @@ function! s:handler(lines) abort
      let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
    elseif keypress ==? s:yank_key
      let pat = '\v(.{-}):\d+:'
-     let hashes = join(filter(map(a:lines[2:], 'matchlist(v:val, pat)[1]'), 'len(v:val)'), s:yank_separator)
+     let hashes = join(filter(map(copy(a:lines[2:]), 'matchlist(v:val, pat)[1]'), 'len(v:val)'), s:yank_separator)
      return s:yank_to_register(hashes)
    else
        let filenames = a:lines[2:]
