@@ -11,7 +11,7 @@ from sys import stdin
 
 # These are floated to the top so they aren't recalculated every loop.  The
 # most restrictive replacements should come earlier.
-REPLACEMENTS = ('', pardir, '~')
+REPLACEMENTS = ("", pardir, "~")
 old_paths = [abspath(expanduser(replacement)) for replacement in REPLACEMENTS]
 
 
@@ -44,11 +44,11 @@ def shorten(path: str):
     return short_path, filename
 
 
-GREEN = '\033[32m'
-PURPLE = '\033[35m'  # looks pink to me
-CYAN = '\033[36m'
+GREEN = "\033[32m"
+PURPLE = "\033[35m"  # looks pink to me
+CYAN = "\033[36m"
 
-RESET = '\033[0m'
+RESET = "\033[0m"
 
 # RED = '\033[31m'
 # BLUE = '\033[34m'
@@ -64,7 +64,7 @@ def color(line, color):
 
 def process_line(line: str) -> str:
     # Expected format is colon separated `name:line number:contents`
-    filename, linenum, contents = line.split(sep=':', maxsplit=2)
+    filename, linenum, contents = line.split(sep=":", maxsplit=2)
 
     # Drop trailing newline.
     contents = contents.rstrip()
@@ -77,14 +77,14 @@ def process_line(line: str) -> str:
     # with an empty directory. The slash is manually colored because otherwise
     # `os.path.join` won't do it.
     if shortened_parent:
-        colored_short_name = color(shortened_parent + '/', PURPLE)
+        colored_short_name = color(shortened_parent + "/", PURPLE)
     else:
-        colored_short_name = ''
+        colored_short_name = ""
 
     colored_short_name += color(basename, CYAN)
 
     # Format is: long form, line number, short form, line number, rest of line. This is so Vim can process it.
-    formatted_line = ':'.join(
+    formatted_line = ":".join(
         [
             color(filename, CYAN),
             color(linenum, GREEN),
@@ -99,6 +99,6 @@ def process_line(line: str) -> str:
     # print(formatted_line)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     for line in stdin:
         print(process_line(line))

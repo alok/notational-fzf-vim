@@ -22,7 +22,7 @@ RED = "\033[1;31m"
 RESET = "\033[0;0m"
 BOLD = "\033[;1m"
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with open(file) as f:
         for linenum, line_content in enumerate(f, start=1):
             if beginning <= linenum <= end:
