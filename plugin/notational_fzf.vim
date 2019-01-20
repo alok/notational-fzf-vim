@@ -67,7 +67,7 @@ let s:search_path_str = join(map(copy(s:search_paths), 'shellescape(v:val)'))
 "=========================== Keymap ========================================
 
 let s:create_note_key = get(g:, 'nv_create_note_key', 'ctrl-x')
-let s:yank_key = get(g:, 'nv_yank_key', "ctrl-y")
+let s:yank_key = get(g:, 'nv_yank_key', 'ctrl-y')
 let s:create_note_window = get(g:, 'nv_create_note_window', 'vertical split ')
 
 let s:keymap = get(g:, 'nv_keymap',
@@ -81,7 +81,7 @@ let s:keymap = extend(s:keymap, {
             \ s:create_note_key : s:create_note_window,
             \ })
 
-" FZF expect comma sep str
+" FZF expects a comma separated string.
 let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []), ',')
 
 "================================ Yank string ==============================
