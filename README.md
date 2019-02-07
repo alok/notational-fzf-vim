@@ -8,11 +8,9 @@ tartar of convention that handicaps its retrieval.***
 ## Usage
 
 See the following GIF or watch this
-[asciinema](https://asciinema.org/a/87077gwwldpnjtvzd5drsdw39):
+[asciinema](https://asciinema.org/a/oXAsE6lDnywkrSSH5xuOIVQuO):
 
 ![Usage](/screenshots/usage.gif?raw=true "Usage")
-
-![Usage](/screenshots/lazy-eval.png?raw=true "Usage")
 
 ## Installation
 
