@@ -194,6 +194,7 @@ command! -nargs=* -bang NV
                    \ 'rg',
                    \ '--follow',
                    \ '--hidden',
+                   \ '-i',
                    \ '--line-number',
                    \ '--color never',
                    \ '--no-messages',
