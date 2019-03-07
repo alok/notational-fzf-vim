@@ -212,7 +212,7 @@ command! -nargs=* -bang NV
                                \ '--print-query',
                                \ '--ansi',
                                \ '--multi',
-                               \ '--exact',
+                               \ '-i',
                                \ '--expect=ctrl-y',
                                \ '--inline-info',
                                \ '--delimiter=":"',
