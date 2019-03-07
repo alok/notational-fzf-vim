@@ -193,6 +193,7 @@ command! -nargs=* -bang NV
                    \ 'command',
                    \ 'rg',
                    \ '--follow',
+                   \ '--smart-case',
                    \ '--hidden',
                    \ '--line-number',
                    \ '--color never',
