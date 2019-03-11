@@ -9,6 +9,7 @@ from os.path import abspath, expanduser, join, split
 from pathlib import PurePath
 from sys import stdin
 
+
 # These are floated to the top so they aren't recalculated every loop.  The
 # most restrictive replacements should come earlier.
 REPLACEMENTS = ("", pardir, "~")
@@ -77,11 +78,11 @@ def process_line(line: str) -> str:
     # with an empty directory. The slash is manually colored because otherwise
     # `os.path.join` won't do it.
     if shortened_parent:
-        colored_short_name = color(shortened_parent + "/", PURPLE)
+        colored_short_name = color(shortened_parent + "/", PURPLE) + color(
+            basename, CYAN
+        )
     else:
-        colored_short_name = ""
-
-    colored_short_name += color(basename, CYAN)
+        colored_short_name = color(basename, CYAN)
 
     # Format is: long form, line number, short form, line number, rest of line. This is so Vim can process it.
     formatted_line = ":".join(
