@@ -80,7 +80,9 @@ since it's just a wrapper over `fzf`.
 
 -   [`rg`](https://github.com/BurntSushi/ripgrep) is required for its
     fast search.
+
 -   [`fzf`](https://github.com/junegunn/fzf).
+
 -   `fzf` Vim plugin. Install the Vim plugin that comes with `fzf`,
     which can be done like so if you use
     [vim-plug](https://github.com/junegunn/vim-plug).
@@ -115,7 +117,8 @@ command `:NV`, which can take 0 or more arguments, which are interpreted
 as regexes.
 
 Type `:NV` or bind it to a mapping to bring up a fuzzy search menu. Type
-in your search terms and it will fuzzy search for them.
+in your search terms and it will fuzzy search for them. Adding an
+exclamation mark to the command (`:NV!`), will run it fullscreen.
 
 You can type `:NV` to see all results, and then filter them with FZF.
 You can type `:NV python` to restrict your initial search to lines that
@@ -187,6 +190,12 @@ let g:nv_show_preview = 1
 
 " Boolean. Wrap text in preview window.
 let g:nv_wrap_preview_text = 1
+
+" String. Width of window as a percentage of screen's width.
+let g:nv_window_width = '40%'
+
+" String. Determines where the window is. Valid options are: 'right', 'left', 'up', 'down'.
+let g:nv_window_direction = 'down'
 
 " Float. Width of preview window as a percentage of screen's width. 50% by default.
 let g:nv_preview_width = 50

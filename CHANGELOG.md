@@ -1,3 +1,8 @@
+## 2.1.0
+
+Added more window size management with `g:nv_window_width` and
+`g:nv_window_direction`. Can now run fullscreen with `:NV!`.
+
 ## 2.0.0
 
 -   Rename `g:nv_directories` to `g:nv_search_paths`. This emphasizes

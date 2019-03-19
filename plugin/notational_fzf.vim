@@ -29,6 +29,9 @@ if !exists('g:nv_search_paths')
 
 endif
 
+let s:window_direction = get(g:, 'nv_window_direction', 'down')
+let s:window_width = get(g:, 'nv_window_width', '40%')
+
 let s:ext = get(g:, 'nv_default_extension', '.md')
 
 " Valid options are ['up', 'down', 'right', 'left']. Default is 'right'. No colon for
@@ -208,7 +211,7 @@ command! -nargs=* -bang NV
                    \ s:format_path_expr,
                    \ '2>/dev/null',
                    \ ]),
-                   \
+              \ s:window_direction: s:window_width,
               \ 'options': join([
                                \ '--print-query',
                                \ '--ansi',
@@ -237,5 +240,6 @@ command! -nargs=* -bang NV
                                                                    \ ]),
                                                             \ 'v:val != "" ')
                                                        \ ,':')
-                               \ ])}))
+                               \ ])},<bang>0))
+
 
