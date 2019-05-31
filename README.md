@@ -274,3 +274,7 @@ Is ***always*** welcome. If you have any ideas or issues, let me know
 and I'll try to address them. Not all will be implemented, but if they
 fit into the philosophy of this plugin or seem really useful, I'll do my
 best.
+
+## License
+
+Apache 2
