@@ -22,7 +22,7 @@ See the following GIF or watch this
 
 ``` {.vim}
 " with vim-plug
-Plug 'https://github.com/Alok/notational-fzf-vim'
+Plug 'https://github.com/alok/notational-fzf-vim'
 ```
 
 ## Changes
@@ -216,8 +216,8 @@ let g:nv_yank_key = 'ctrl-y'
 let g:nv_yank_separator = "\n"
 
 " Boolean. If set, will truncate each path element to a single character. If
-" you have colons in your pathname, this will fail. Not set by default.
-let g:nv_use_short_pathnames = 0
+" you have colons in your pathname, this will fail. Set by default
+let g:nv_use_short_pathnames = 1
 
 "List of Strings. Shell glob patterns. Ignore all filenames that match any of
 " the patterns.
