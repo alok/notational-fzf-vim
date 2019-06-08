@@ -44,7 +44,7 @@ let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? 'wrap' : ''
 let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
 
 " Respect .*ignore files unless user has chosen not to
-let s:ignore_files = get(g:, 'nv_ignore_files', 1) ? '' : '-u'
+let s:use_ignore_files = get(g:, 'nv_use_ignore_files', 1) ? '' : '-u'
 
 " How wide to make preview window. 72 characters is default.
 let s:preview_width = exists('g:nv_preview_width') ? string(float2nr(str2float(g:nv_preview_width) / 100.0 * &columns)) : ''
@@ -199,7 +199,7 @@ command! -nargs=* -bang NV
                    \ 'command',
                    \ 'rg',
                    \ '--follow',
-                   \ s:ignore_files,
+                   \ s:use_ignore_files,
                    \ '--smart-case',
                    \ '--hidden',
                    \ '--line-number',
