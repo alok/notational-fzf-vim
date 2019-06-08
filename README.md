@@ -195,7 +195,7 @@ let g:nv_create_note_window = 'vertical split'
 let g:nv_show_preview = 1
 
 " Boolean. Respect .*ignore files in or above nv_search_paths. Set by default.
-let g:nv_ignore_files = 1
+let g:nv_use_ignore_files = 1
 
 " Boolean. Wrap text in preview window.
 let g:nv_wrap_preview_text = 1
