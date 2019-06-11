@@ -55,6 +55,9 @@ let s:search_paths = map(copy(g:nv_search_paths), 'expand(v:val)')
 " Separator for yanked files
 let s:yank_separator = get(g:, 'nv_yank_separator', "\n")
 
+" Separator for words in filename
+let s:filename_word_seperator = get(g:, 'nv_filename_word_separator', ' ')
+
 " The `exists()` check needs to be first in case the main directory is not
 " part of `g:nv_search_paths`.
 if exists('g:nv_main_directory')
@@ -157,7 +160,8 @@ function! s:handler(lines) abort
 
    " Handle creating note.
    if keypress ==? s:create_note_key
-     let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
+     let filename = join(split(query, ' '), s:filename_word_seperator)
+     let candidates = [fnameescape(s:main_dir  . '/' . filename . s:ext)]
    elseif keypress ==? s:yank_key
      let pat = '\v(.{-}):\d+:'
      let hashes = join(filter(map(copy(a:lines[2:]), 'matchlist(v:val, pat)[1]'), 'len(v:val)'), s:yank_separator)

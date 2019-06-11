@@ -188,8 +188,12 @@ let g:nv_keymap = {
 " String. Must be in the form 'ctrl-KEY' or 'alt-KEY'
 let g:nv_create_note_key = 'ctrl-x'
 
+" String. Sets the string will be used to separate words in the filename for the created note.
+let g:nv_filename_word_separator = ' '
+
 " String. Controls how new note window is created.
 let g:nv_create_note_window = 'vertical split'
+
 
 " Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
 let g:nv_show_preview = 1
