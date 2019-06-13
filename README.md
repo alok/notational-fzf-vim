@@ -133,7 +133,7 @@ separated by a space. You know, regexes.
 
 It does not search in a fully fuzzy fashion because that's less useful
 for prose. It looks for full words, but they don't have to be next to
-each other, just in the right order. You can use the arrow keys or `c-p`
+each other, just on the same line. You can use the arrow keys or `c-p`
 and `c-n` to scroll through the search results, and then hit one of
 these keys to open up a file:
 
