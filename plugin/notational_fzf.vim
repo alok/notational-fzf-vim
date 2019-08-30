@@ -45,7 +45,7 @@ let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? 'wrap' : ''
 let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
 
 " Respect .*ignore files unless user has chosen not to
-let s:use_ignore_files = get(g:, 'nv_use_ignore_files', 1) ? '' : '-u'
+let s:use_ignore_files = get(g:, 'nv_use_ignore_files', 1) ? '' : '--no-ignore'
 
 " Skip hidden files and folders unless user chooses to include them
 let s:include_hidden = get(g:, 'nv_include_hidden', 0) ? '--hidden' : ''
