@@ -141,7 +141,7 @@ Note that the following options can be customized.
 
 -   `c-x`: Use search string as filename and open in vertical split.
 -   `c-v`: Open in vertical split
--   `c-s`: Open in horizontal split
+-   `c-h`: Open in horizontal split
 -   `c-t`: Open in new tab
 -   `c-y`: Yank the selected filenames
 -   `<Enter>`: Open highlighted search result in current buffer
@@ -157,7 +157,7 @@ default. You should use whatever mapping(s) work best for you.
 For example,
 
 ``` {.vim}
-nnoremap <silent> <c-s> :NV<CR>
+nnoremap <silent> <c-n> :NV<CR>
 ```
 
 ## Optional Settings and Their Defaults
@@ -180,7 +180,7 @@ let g:nv_default_extension = '.md'
 " Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
 " 'command' or 'alt-KEY' : 'command'. See examples below.
 let g:nv_keymap = {
-                    \ 'ctrl-s': 'split ',
+                    \ 'ctrl-h': 'split ',
                     \ 'ctrl-v': 'vertical split ',
                     \ 'ctrl-t': 'tabedit ',
                     \ })

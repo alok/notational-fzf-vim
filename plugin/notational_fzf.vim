@@ -88,7 +88,7 @@ let s:yank_key = get(g:, 'nv_yank_key', 'ctrl-y')
 let s:create_note_window = get(g:, 'nv_create_note_window', 'vertical split ')
 
 let s:keymap = get(g:, 'nv_keymap',
-            \ {'ctrl-s': 'split',
+            \ {'ctrl-h': 'split',
             \ 'ctrl-v': 'vertical split',
             \ 'ctrl-t': 'tabedit',
             \ })
