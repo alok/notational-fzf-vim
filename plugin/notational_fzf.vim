@@ -31,6 +31,7 @@ endif
 
 let s:window_direction = get(g:, 'nv_window_direction', 'down')
 let s:window_width = get(g:, 'nv_window_width', '40%')
+let s:window_command = get(g:, 'nv_window_command', '')
 
 let s:ext = get(g:, 'nv_default_extension', '.md')
 
@@ -195,6 +196,7 @@ command! -nargs=* -bang NV
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
+              \ 'window': s:window_command,
               \ 'source': join([
                    \ 'command',
                    \ 'rg',

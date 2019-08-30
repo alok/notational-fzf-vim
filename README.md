@@ -206,6 +206,10 @@ let g:nv_window_width = '40%'
 " String. Determines where the window is. Valid options are: 'right', 'left', 'up', 'down'.
 let g:nv_window_direction = 'down'
 
+" String. Command to open the window (e.g. `vertical` `aboveleft` `30new` `call my_function()`).
+let g:nv_window_command = 'down'
+let g:nv_window_command = 'call my_function()'
+
 " Float. Width of preview window as a percentage of screen's width. 50% by default.
 let g:nv_preview_width = 50
 
