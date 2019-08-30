@@ -47,6 +47,9 @@ let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
 " Respect .*ignore files unless user has chosen not to
 let s:use_ignore_files = get(g:, 'nv_use_ignore_files', 1) ? '' : '-u'
 
+" Skip hidden files and folders unless user chooses to include them
+let s:include_hidden = get(g:, 'nv_include_hidden', 0) ? '--hidden' : ''
+
 " How wide to make preview window. 72 characters is default.
 let s:preview_width = exists('g:nv_preview_width') ? string(float2nr(str2float(g:nv_preview_width) / 100.0 * &columns)) : ''
 
@@ -203,7 +206,7 @@ command! -nargs=* -bang NV
                    \ '--follow',
                    \ s:use_ignore_files,
                    \ '--smart-case',
-                   \ '--hidden',
+                   \ s:include_hidden,
                    \ '--line-number',
                    \ '--color never',
                    \ '--no-messages',
