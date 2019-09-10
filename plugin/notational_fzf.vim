@@ -99,7 +99,7 @@ let s:keymap = extend(s:keymap, {
             \ })
 
 " FZF expects a comma separated string.
-let s:expect_keys = join(get(g:, 'nv_expect_keys', keys(s:keymap) + [s:yank_key]), ',')
+let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []) + [s:yank_key], ',')
 
 "================================ Yank string ==============================
 
