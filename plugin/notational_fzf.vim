@@ -111,7 +111,7 @@ endfunction
 
 "================================ Short Pathnames ==========================
 
-let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', 0)
+let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', 1)
 
 " Python 3 is required for this to work
 let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'

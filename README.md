@@ -162,7 +162,7 @@ nnoremap <silent> <c-s> :NV<CR>
 
 ## Optional Settings and Their Defaults
 
-You can shorten pathnames by setting `g:nv_use_short_pathnames = 1`.
+You can display the full path by setting `g:nv_use_short_pathnames = 0`.
 
 You can toggle displaying the preview window by pressing `alt-p`. This
 is handy on smaller screens. If you don't want to show the preview by
@@ -226,7 +226,7 @@ let g:nv_yank_key = 'ctrl-y'
 let g:nv_yank_separator = "\n"
 
 " Boolean. If set, will truncate each path element to a single character. If
-" you have colons in your pathname, this will fail. Set by default
+" you have colons in your pathname, this will fail. Set by default.
 let g:nv_use_short_pathnames = 1
 
 "List of Strings. Shell glob patterns. Ignore all filenames that match any of
