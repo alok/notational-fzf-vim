@@ -59,6 +59,18 @@ let s:search_paths = map(copy(g:nv_search_paths), 'expand(v:val)')
 " Separator for yanked files
 let s:yank_separator = get(g:, 'nv_yank_separator', "\n")
 
+"=========================== Windows Overrides ============================
+
+if has('win64') || has('win32')
+  let s:null_path = 'NUL'
+  let s:command = ''
+  let s:use_short_pathnames_default = 0
+else
+  let s:null_path = '/dev/null/'
+  let s:command = 'command'
+  let s:use_short_pathnames_default = 1
+endif
+
 " The `exists()` check needs to be first in case the main directory is not
 " part of `g:nv_search_paths`.
 if exists('g:nv_main_directory')
@@ -111,11 +123,11 @@ endfunction
 
 "================================ Short Pathnames ==========================
 
-let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', 1)
+let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', s:use_short_pathnames_default)
 
 " Python 3 is required for this to work
 let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'
-let s:highlight_path_expr = join([s:python_executable , '-S',expand('<sfile>:p:h:h') . '/print_lines.py' , '{2} {1} ', '2>/dev/null',])
+let s:highlight_path_expr = join([s:python_executable , '-S',expand('<sfile>:p:h:h') . '/print_lines.py' , '{2} {1} ', '2>' . s:null_path,])
 
 if s:use_short_pathnames
     let s:format_path_expr = join([' | ', s:python_executable, '-S', shellescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py'),])
@@ -201,7 +213,7 @@ command! -nargs=* -bang NV
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
               \ 'window': s:window_command,
               \ 'source': join([
-                   \ 'command',
+                   \ s:command,
                    \ 'rg',
                    \ '--follow',
                    \ s:use_ignore_files,
@@ -218,7 +230,7 @@ command! -nargs=* -bang NV
                      \ shellescape(<q-args>)),
                    \ s:search_path_str,
                    \ s:format_path_expr,
-                   \ '2>/dev/null',
+                   \ '2>' . s:null_path,
                    \ ]),
               \ s:window_direction: s:window_width,
               \ 'options': join([
