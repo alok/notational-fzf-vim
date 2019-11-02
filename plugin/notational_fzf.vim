@@ -66,7 +66,7 @@ if has('win64') || has('win32')
   let s:command = ''
   let s:use_short_pathnames_default = 0
 else
-  let s:null_path = '/dev/null/'
+  let s:null_path = '/dev/null'
   let s:command = 'command'
   let s:use_short_pathnames_default = 1
 endif
