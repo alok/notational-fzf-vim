@@ -14,6 +14,7 @@ from sys import platform, stdin
 # most restrictive replacements should come earlier.
 REPLACEMENTS = ("", pardir, "~")
 old_paths = [abspath(expanduser(replacement)) for replacement in REPLACEMENTS]
+IS_WINDOWS = platform.startswith('win32')
 
 
 def prettyprint_path(path: str, old_path: str, replacement: str) -> str:
@@ -66,22 +67,21 @@ def color(line, color):
 def process_line(line: str) -> str:
     # Expected format is colon separated `name:line number:contents`
 
-    if platform.startswith('win32'):
+    if IS_WINDOWS:
         # Windows paths may contain a colon, e.g. C:\Windows\ which messes up the split
         # splitdrive(string) results in the following:
         #   Windows drive letter, e.g. C:\Windows\Folder\Foo.txt -> ('C', '\Windows\Folder\Foo.txt')
         #   Windows UNC path, e.g. \\Server\Share\Folder\Foo.txt -> ('\\Server\Share', '\Folder\Foo.txt')
         #   *nix, e.g. /any/path/to/file.txt -> ('', '/any/path/to/file.txt')
-        #  Replace the : with a _ because the : will cause problems with FZF's delimiters, too.
-        drive, remainder = splitdrive(line)
-        line = drive.replace(':', '_') + remainder
+        #  Toss the drive letter since it's not really necessary.
+        _, line = splitdrive(line)
     filename, linenum, contents = line.split(sep=":", maxsplit=2)
 
     # Drop trailing newline.
     contents = contents.rstrip()
 
     # Normalize path for further processing.
-    if not platform.startswith('win32'):
+    if not IS_WINDOWS:
         # This prepends cwd in Windows which is unnecessary.
         filename = abspath(filename)
 
