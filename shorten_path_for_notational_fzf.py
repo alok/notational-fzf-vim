@@ -66,14 +66,15 @@ def color(line, color):
 def process_line(line: str) -> str:
     # Expected format is colon separated `name:line number:contents`
 
-    # Windows paths may contain a colon, e.g. C:\Windows\ which messes up the split
-    # splitdrive(string) results in the following:
-    #   Windows drive letter, e.g. C:\Windows\Folder\Foo.txt -> ('C', '\Windows\Folder\Foo.txt')
-    #   Windows UNC path, e.g. \\Server\Share\Folder\Foo.txt -> ('\\Server\Share', '\Folder\Foo.txt')
-    #   *nix, e.g. /any/path/to/file.txt -> ('', '/any/path/to/file.txt')
-    #  Replace the : with a _ because the : will cause problems with FZF's delimiters, too.
-    drive, remainder = splitdrive(line)
-    line = drive.replace(':', '_') + remainder
+    if platform.startswith('win32'):
+        # Windows paths may contain a colon, e.g. C:\Windows\ which messes up the split
+        # splitdrive(string) results in the following:
+        #   Windows drive letter, e.g. C:\Windows\Folder\Foo.txt -> ('C', '\Windows\Folder\Foo.txt')
+        #   Windows UNC path, e.g. \\Server\Share\Folder\Foo.txt -> ('\\Server\Share', '\Folder\Foo.txt')
+        #   *nix, e.g. /any/path/to/file.txt -> ('', '/any/path/to/file.txt')
+        #  Replace the : with a _ because the : will cause problems with FZF's delimiters, too.
+        drive, remainder = splitdrive(line)
+        line = drive.replace(':', '_') + remainder
     filename, linenum, contents = line.split(sep=":", maxsplit=2)
 
     # Drop trailing newline.
