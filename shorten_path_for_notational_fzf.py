@@ -5,9 +5,9 @@
 # script, and the point of this one is to run fast.
 
 from os import pardir
-from os.path import abspath, expanduser, join, split
+from os.path import abspath, expanduser, join, sep, split, splitdrive
 from pathlib import PurePath
-from sys import stdin
+from sys import platform, stdin
 
 
 # These are floated to the top so they aren't recalculated every loop.  The
@@ -65,20 +65,31 @@ def color(line, color):
 
 def process_line(line: str) -> str:
     # Expected format is colon separated `name:line number:contents`
+
+    # Windows paths may contain a colon, e.g. C:\Windows\ which messes up the split
+    # splitdrive(string) results in the following:
+    #   Windows drive letter, e.g. C:\Windows\Folder\Foo.txt -> ('C', '\Windows\Folder\Foo.txt')
+    #   Windows UNC path, e.g. \\Server\Share\Folder\Foo.txt -> ('\\Server\Share', '\Folder\Foo.txt')
+    #   *nix, e.g. /any/path/to/file.txt -> ('', '/any/path/to/file.txt')
+    #  Replace the : with a _ because the : will cause problems with FZF's delimiters, too.
+    drive, remainder = splitdrive(line)
+    line = drive.replace(':', '_') + remainder
     filename, linenum, contents = line.split(sep=":", maxsplit=2)
 
     # Drop trailing newline.
     contents = contents.rstrip()
 
     # Normalize path for further processing.
-    filename = abspath(filename)
+    if not platform.startswith('win32'):
+        # This prepends cwd in Windows which is unnecessary.
+        filename = abspath(filename)
 
     shortened_parent, basename = shorten(filename)
     # The conditional is to avoid a leading slash if the parent is replaced
     # with an empty directory. The slash is manually colored because otherwise
     # `os.path.join` won't do it.
     if shortened_parent:
-        colored_short_name = color(shortened_parent + "/", PURPLE) + color(
+        colored_short_name = color(shortened_parent + sep, PURPLE) + color(
             basename, CYAN
         )
     else:

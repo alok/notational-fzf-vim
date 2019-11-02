@@ -64,11 +64,9 @@ let s:yank_separator = get(g:, 'nv_yank_separator', "\n")
 if has('win64') || has('win32')
   let s:null_path = 'NUL'
   let s:command = ''
-  let s:use_short_pathnames_default = 0
 else
   let s:null_path = '/dev/null'
   let s:command = 'command'
-  let s:use_short_pathnames_default = 1
 endif
 
 " The `exists()` check needs to be first in case the main directory is not
@@ -123,7 +121,7 @@ endfunction
 
 "================================ Short Pathnames ==========================
 
-let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', s:use_short_pathnames_default)
+let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', 1)
 
 " Python 3 is required for this to work
 let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'
