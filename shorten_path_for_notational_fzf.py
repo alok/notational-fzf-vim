@@ -4,17 +4,18 @@
 # Supposedly, importing so that you don't need dots in names speeds up a
 # script, and the point of this one is to run fast.
 
+import platform
 from os import pardir
 from os.path import abspath, expanduser, join, sep, split, splitdrive
 from pathlib import PurePath
-from sys import platform, stdin
+from sys import stdin
 
 
 # These are floated to the top so they aren't recalculated every loop.  The
 # most restrictive replacements should come earlier.
 REPLACEMENTS = ("", pardir, "~")
 old_paths = [abspath(expanduser(replacement)) for replacement in REPLACEMENTS]
-IS_WINDOWS = platform.startswith('win32')
+IS_WINDOWS = platform.system().lower() == "windows"
 
 
 def prettyprint_path(path: str, old_path: str, replacement: str) -> str:
@@ -73,8 +74,7 @@ def process_line(line: str) -> str:
         #   Windows drive letter, e.g. C:\Windows\Folder\Foo.txt -> ('C', '\Windows\Folder\Foo.txt')
         #   Windows UNC path, e.g. \\Server\Share\Folder\Foo.txt -> ('\\Server\Share', '\Folder\Foo.txt')
         #   *nix, e.g. /any/path/to/file.txt -> ('', '/any/path/to/file.txt')
-        #  Toss the drive letter since it's not really necessary.
-        _, line = splitdrive(line)
+        _, line = splitdrive(line)  #  Toss the drive letter since it's not necessary.
     filename, linenum, contents = line.split(sep=":", maxsplit=2)
 
     # Drop trailing newline.
