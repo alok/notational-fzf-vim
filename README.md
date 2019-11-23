@@ -78,10 +78,6 @@ You can define relative links, so adding `./docs` and `./notes` will
 work. Keep in mind that it's relative to your current working directory
 (as Vim interprets it).
 
-This plugin may not work on Windows. I only have a Mac to test it on. It
-works for sure on Mac with Neovim, and *should* work in terminal Vim,
-since it's just a wrapper over `fzf`.
-
 ## Dependencies
 
 -   [`rg`](https://github.com/BurntSushi/ripgrep) is required for its
