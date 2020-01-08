@@ -59,6 +59,9 @@ let s:search_paths = map(copy(g:nv_search_paths), 'expand(v:val)')
 " Separator for yanked files
 let s:yank_separator = get(g:, 'nv_yank_separator', "\n")
 
+" Delimiter for new files created from queries
+let s:file_name_delimiter = get(g:, 'nv_file_name_delimiter', " ")
+
 "=========================== Windows Overrides ============================
 
 if has('win64') || has('win32')
@@ -171,7 +174,8 @@ function! s:handler(lines) abort
 
    " Handle creating note.
    if keypress ==? s:create_note_key
-     let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
+     let delimited_query = substitute(query, ' ', s:file_name_delimiter, 'g')
+     let candidates = [fnameescape(s:main_dir  . '/' . delimited_query . s:ext)]
    elseif keypress ==? s:yank_key
      let pat = '\v(.{-}):\d+:'
      let hashes = join(filter(map(copy(a:lines[2:]), 'matchlist(v:val, pat)[1]'), 'len(v:val)'), s:yank_separator)

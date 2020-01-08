@@ -221,6 +221,9 @@ let g:nv_yank_key = 'ctrl-y'
 " String. Separator used between yanked filenames.
 let g:nv_yank_separator = "\n"
 
+" String. Delimiter used between words in a search query when creating a new file.
+let g:nv_yank_separator = " "
+
 " Boolean. If set, will truncate each path element to a single character. If
 " you have colons in your pathname, this will fail. Set by default.
 let g:nv_use_short_pathnames = 1
