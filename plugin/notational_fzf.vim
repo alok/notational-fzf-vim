@@ -206,6 +206,10 @@ endfunction
 " The `' "\S" '` is so that the backslash itself doesn't require escaping.
 " g:search_paths is already shell escaped, so we don't do it again
 command! -nargs=* -bang NV
+      \ execute 'autocmd FileType fzf ++once setlocal statusline=%y\ '
+          \ . s:create_note_key . '\ create\ \ '
+          \ . s:yank_key . '\ yank'
+      \ |
       \ call fzf#run(
           \ fzf#wrap({
               \ 'sink*': function(exists('*NV_note_handler') ? 'NV_note_handler' : '<sid>handler'),
