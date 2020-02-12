@@ -155,6 +155,18 @@ let s:nv_ignore_pattern = exists('g:nv_ignore_pattern') ? s:ignore_list_to_str(g
 
 "============================== Handler Function ===========================
 
+function! s:new_file(basename) abort
+  if exists('*NV_new_file_name')
+    let name = NV_new_file_name(a:basename)
+  else
+    let name = a:basename
+  endif
+  if empty(name)
+    return []
+  endif
+  return [fnameescape(s:main_dir  . '/' . name . s:ext)]
+endfunction
+
 function! s:handler(lines) abort
     " exit if empty
     if a:lines == [] || a:lines == ['','','']
@@ -171,7 +183,7 @@ function! s:handler(lines) abort
 
    " Handle creating note.
    if keypress ==? s:create_note_key
-     let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
+     let candidates = s:new_file(query)
    elseif keypress ==? s:yank_key
      let pat = '\v(.{-}):\d+:'
      let hashes = join(filter(map(copy(a:lines[2:]), 'matchlist(v:val, pat)[1]'), 'len(v:val)'), s:yank_separator)
@@ -187,6 +199,9 @@ function! s:handler(lines) abort
            " by vim rather than the shell
            call add(candidates, linenum . fnameescape(name))
        endfor
+       if empty(candidates)
+         let candidates = s:new_file(query)
+       endif
    endif
 
    for candidate in candidates
