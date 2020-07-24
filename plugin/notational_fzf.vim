@@ -34,6 +34,7 @@ let s:window_width = get(g:, 'nv_window_width', '40%')
 let s:window_command = get(g:, 'nv_window_command', '')
 
 let s:ext = get(g:, 'nv_default_extension', '.md')
+let s:file_ext = join(['--type-add="filetype:*', s:ext, '"', ' -tfiletype '], '')
 
 " Valid options are ['up', 'down', 'right', 'left']. Default is 'right'. No colon for
 " this command since it's first in the list.
@@ -223,6 +224,7 @@ command! -nargs=* -bang NV
                    \ s:nv_ignore_pattern,
                    \ '--no-heading',
                    \ '--with-filename',
+                   \ s:file_ext,
                    \ ((<q-args> is '') ?
                      \ '"\S"' :
                      \ shellescape(<q-args>)),
