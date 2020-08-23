@@ -125,7 +125,7 @@ let s:use_short_pathnames = get(g:, 'nv_use_short_pathnames', 1)
 
 " Python 3 is required for this to work
 let s:python_executable = executable('pypy3') ? 'pypy3' : get(g:, 'python3_host_prog', 'python3')
-let s:highlight_path_expr = join([s:python_executable , '-S',expand('<sfile>:p:h:h') . '/print_lines.py' , '{2} {1} ', '2>' . s:null_path,])
+let s:highlight_path_expr = join([s:python_executable , '-S',expand('<sfile>:p:h:h') . '/print_lines.py' , '{2} {1} $FZF_PREVIEW_LINES', '2>' . s:null_path,])
 
 if s:use_short_pathnames
     let s:format_path_expr = join([' | ', s:python_executable, '-S', shellescape(expand('<sfile>:p:h:h') . '/shorten_path_for_notational_fzf.py'),])
