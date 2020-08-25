@@ -41,6 +41,9 @@ let s:preview_direction = get(g:, 'nv_preview_direction', 'right')
 
 let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? 'wrap' : ''
 
+" Optionally sort results, which slows down search by making rg nonparallel
+let s:sort_by_modified = get(g:, 'nv_sort_by_modified', 0) ? '--sortr modified' : ''
+
 " Show preview unless user set it to be hidden
 let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
 
@@ -213,6 +216,7 @@ command! -nargs=* -bang NV
               \ 'source': join([
                    \ s:command,
                    \ 'rg',
+                   \ s:sort_by_modified,
                    \ '--follow',
                    \ s:use_ignore_files,
                    \ '--smart-case',
