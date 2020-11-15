@@ -30,7 +30,7 @@ if __name__ == "__main__":
             "--color=always",
             "--highlight-line={}".format(line),
         ]
-        if (line >= (height / 2) - 1) and (lines >= height):
+        if (line > (height / 2)) and (lines >= height):
             insert = "--line-range={}:{}".format(int(line - (height / 2)), lines)
             cmd.append(insert)
         cmd.append(path.normpath(file))
