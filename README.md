@@ -234,6 +234,10 @@ let g:nv_ignore_pattern = ['summarize-*', 'misc*']
 let g:nv_expect_keys = []
 ```
 
+### bat config
+
+If `bat` is in the PATH then it will be used. It will use `$BAT_THEME` if it's set.
+
 You can also define your own handler function, in case you don't like
 how this plugin handles input but like how it wraps everything else. It
 *must* be called `NV_note_handler`.
