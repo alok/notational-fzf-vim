@@ -22,7 +22,6 @@ if __name__ == "__main__":
     try:
         # fail fast
         subprocess.check_call(["bat"])
-
         lines = opcount(file)
         cmd = [
             "bat",
