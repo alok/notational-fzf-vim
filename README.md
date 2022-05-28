@@ -242,6 +242,14 @@ You can also define your own handler function, in case you don't like
 how this plugin handles input but like how it wraps everything else. It
 *must* be called `NV_note_handler`.
 
+Integration with Goyo and other plugins may be accomplished by intercepting
+the `User#NVLeave` event:
+
+``` {.vim}
+autocmd! User NVLeave Goyo
+```
+
+
 ## Potential Use Cases
 
 -   Add `~/notes` and `~/wiki` so your notes are only one key binding
