@@ -1,3 +1,8 @@
+# Looking for Maintainer
+
+I don't have time to maintain this project anymore. If you are interested in
+taking over, please contact me in the GitHub issues.
+
 # Notational FZF
 
 ***Loosen the mental blockages to recording information. Scrape away the
