@@ -16,17 +16,13 @@ endif
 
 "============================== User settings ==============================
 
-
 if !exists('g:nv_search_paths')
-
     if exists('g:nv_directories')
         echoerr '`g:nv_directories` has been renamed `g:nv_search_paths`. Please update your config files.'
     else
         echoerr '`g:nv_search_paths` is not defined.'
     endif
-
     finish
-
 endif
 
 let s:window_direction = get(g:, 'nv_window_direction', 'down')
@@ -58,6 +54,12 @@ let s:search_paths = map(copy(g:nv_search_paths), 'expand(v:val)')
 
 " Separator for yanked files
 let s:yank_separator = get(g:, 'nv_yank_separator', "\n")
+
+" Character used as a substitute for spaces
+let s:space_sub = get(g:, 'nv_space_sub', '-')
+
+" When creating a new note substitute all spaces with `g:nv_space_sub`
+let s:use_spaces = get(g:, 'nv_use_spaces', 1) ? 1 : 0
 
 "=========================== Windows Overrides ============================
 
@@ -171,6 +173,12 @@ function! s:handler(lines) abort
 
    " Handle creating note.
    if keypress ==? s:create_note_key
+     if !s:use_spaces
+         " Don't forget trailing space in replacement.
+         let query = substitute(query, '\v.{-}:(\d+):.*$', '+\1 ', '')
+         " substitute spaces with `s:space_sub`
+         let query = substitute(query, ' ', s:space_sub, 'g')
+     endif
      let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
    elseif keypress ==? s:yank_key
      let pat = '\v(.{-}):\d+:'
@@ -259,5 +267,3 @@ command! -nargs=* -bang NV
                                                             \ 'v:val != "" ')
                                                        \ ,':')
                                \ ])},<bang>0))
-
-

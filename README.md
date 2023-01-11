@@ -192,6 +192,12 @@ let g:nv_create_note_key = 'ctrl-x'
 " String. Controls how new note window is created.
 let g:nv_create_note_window = 'vertical split'
 
+" Character used as a substitute for spaces
+let g:nv_space_sub = '-' 
+
+" When creating a new note substitute all spaces with `g:nv_space_sub`. By default is '-'
+let g:nv_use_spaces = 0
+
 " Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
 let g:nv_show_preview = 1
 

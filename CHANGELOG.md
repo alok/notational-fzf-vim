@@ -1,3 +1,8 @@
+## Unreleased
+
+Added the option to not use spaces in new notes filenames with
+`g:nv_space_sub` and `g:nv_use_spaces`
+
 ## 2.1.0
 
 Added more window size management with `g:nv_window_width` and
