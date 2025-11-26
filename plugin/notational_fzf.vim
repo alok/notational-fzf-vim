@@ -34,6 +34,9 @@ let s:window_direction = get(g:, 'nv_window_direction', 'down')
 let s:window_width = get(g:, 'nv_window_width', '40%')
 let s:window_command = get(g:, 'nv_window_command', '')
 
+" Use tmux popup if available and user opts in (requires fzf 0.53+)
+let s:use_tmux_popup = get(g:, 'nv_use_tmux_popup', 0)
+
 let s:ext = get(g:, 'nv_default_extension', '.md')
 
 " Valid options are ['up', 'down', 'right', 'left']. Default is 'right'. No colon for
@@ -45,6 +48,9 @@ let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? 'wrap' : ''
 " Show preview unless user set it to be hidden
 " Use 'nohidden' explicitly to override FZF_DEFAULT_OPTS when preview is enabled
 let s:show_preview = get(g:, 'nv_show_preview', 1) ? 'nohidden' : 'hidden'
+
+" Preview window border style (requires fzf 0.35+)
+let s:preview_border = get(g:, 'nv_preview_border', 'border-left')
 
 " Respect .*ignore files unless user has chosen not to
 let s:use_ignore_files = get(g:, 'nv_use_ignore_files', 1) ? '' : '--no-ignore'
@@ -245,18 +251,22 @@ command! -nargs=* -bang NV
                                \ '--ansi',
                                \ '--multi',
                                \ '--exact',
-                               \ '--inline-info',
+                               \ '--info=inline',
                                \ '--delimiter=":"',
                                \ '--with-nth=' . s:display_start_index ,
                                \ '--tiebreak=' . 'length,begin' ,
                                \ '--expect=' . s:expect_keys ,
+                               \ '--scroll-off=3',
+                               \ (s:use_tmux_popup && exists('$TMUX') ? '--tmux=center,80%,60%' : ''),
                                \ '--bind=' .  join([
                                               \ 'alt-a:select-all',
                                               \ 'alt-q:deselect-all',
                                               \ 'alt-p:toggle-preview',
                                               \ 'alt-u:page-up',
                                               \ 'alt-d:page-down',
+                                              \ 'alt-w:toggle-preview-wrap',
                                               \ 'ctrl-w:backward-kill-word',
+                                              \ 'ctrl-/:change-preview-window(down|hidden|)',
                                               \ ], ','),
                                \ '--preview=' . shellescape(s:highlight_path_expr) ,
                                \ '--preview-window=' . join(filter(copy([
@@ -264,6 +274,7 @@ command! -nargs=* -bang NV
                                                                    \ s:preview_width,
                                                                    \ s:wrap_text,
                                                                    \ s:show_preview,
+                                                                   \ s:preview_border,
                                                                    \ ]),
                                                             \ 'v:val != "" ')
                                                        \ ,':')
