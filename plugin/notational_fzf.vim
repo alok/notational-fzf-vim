@@ -169,6 +169,10 @@ function! s:handler(lines) abort
    " Preprocess candidates here. expect lines to have fmt
    " filename:linenum:content
 
+   if exists('#User#NVEnter')
+     doautocmd User NVEnter
+   endif
+
    " Handle creating note.
    if keypress ==? s:create_note_key
      let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
@@ -193,6 +197,9 @@ function! s:handler(lines) abort
        execute join([cmd, candidate])
    endfor
 
+   if exists('#User#NVLeave')
+     doautocmd User NVLeave
+   endif
 endfunction
 
 " If the file you're looking for is empty, then why does it even exist? It's a
