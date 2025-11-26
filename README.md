@@ -175,7 +175,9 @@ default, set `g:nv_show_preview = 0`.
 let g:nv_default_extension = '.md'
 
 " String. Default is first directory found in `g:nv_search_paths`. Error thrown
-"if no directory found and g:nv_main_directory is not specified
+" if no directory found and g:nv_main_directory is not specified.
+" NOTE: If you set g:nv_main_directory, it must ALSO appear in g:nv_search_paths
+" for its contents to be searchable.
 "let g:nv_main_directory = g:nv_main_directory or (first directory in g:nv_search_paths)
 
 " Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
