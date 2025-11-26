@@ -42,7 +42,8 @@ let s:preview_direction = get(g:, 'nv_preview_direction', 'right')
 let s:wrap_text = get(g:, 'nv_wrap_preview_text', 0) ? 'wrap' : ''
 
 " Show preview unless user set it to be hidden
-let s:show_preview = get(g:, 'nv_show_preview', 1) ? '' : 'hidden'
+" Use 'nohidden' explicitly to override FZF_DEFAULT_OPTS when preview is enabled
+let s:show_preview = get(g:, 'nv_show_preview', 1) ? 'nohidden' : 'hidden'
 
 " Respect .*ignore files unless user has chosen not to
 let s:use_ignore_files = get(g:, 'nv_use_ignore_files', 1) ? '' : '--no-ignore'
