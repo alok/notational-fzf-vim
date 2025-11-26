@@ -22,7 +22,8 @@ if !exists('g:nv_search_paths')
     if exists('g:nv_directories')
         echoerr '`g:nv_directories` has been renamed `g:nv_search_paths`. Please update your config files.'
     else
-        echoerr '`g:nv_search_paths` is not defined.'
+        echoerr '`g:nv_search_paths` is not defined. The :NV command will not be available.'
+        echoerr 'Please add to your vimrc: let g:nv_search_paths = [''~/notes'']'
     endif
 
     finish
