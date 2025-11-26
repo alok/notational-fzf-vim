@@ -113,5 +113,21 @@ def process_line(line: str) -> str:
 
 
 if __name__ == "__main__":
-    for line in stdin:
-        print(process_line(line))
+    # Use stdin.buffer to handle binary data, then decode with error handling
+    # This prevents the script from crashing on files with non-UTF-8 content
+    for raw_line in stdin.buffer:
+        try:
+            line = raw_line.decode("utf-8")
+            print(process_line(line))
+        except UnicodeDecodeError:
+            # Skip lines that can't be decoded as UTF-8 (e.g., binary files)
+            # Try latin-1 as fallback since it can decode any byte sequence
+            try:
+                line = raw_line.decode("latin-1")
+                print(process_line(line))
+            except Exception:
+                # If all else fails, skip this line entirely
+                pass
+        except Exception:
+            # Skip lines that cause other errors (malformed input, etc.)
+            pass

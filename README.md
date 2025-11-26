@@ -147,6 +147,16 @@ Note that the following options can be customized.
 -   `c-y`: Yank the selected filenames
 -   `<Enter>`: Open highlighted search result in current buffer
 
+Additional built-in keybindings:
+
+-   `alt-a`: Select all results
+-   `alt-q`: Deselect all
+-   `alt-p`: Toggle preview window
+-   `alt-w`: Toggle preview line wrapping
+-   `alt-u`/`alt-d`: Page up/down in results
+-   `c-w`: Delete word backward
+-   `c-/`: Cycle preview window position (right → down → hidden → right)
+
 The lines around the selected file will be visible in a preview window.
 
 ## Mappings
@@ -175,7 +185,9 @@ default, set `g:nv_show_preview = 0`.
 let g:nv_default_extension = '.md'
 
 " String. Default is first directory found in `g:nv_search_paths`. Error thrown
-"if no directory found and g:nv_main_directory is not specified
+" if no directory found and g:nv_main_directory is not specified.
+" NOTE: If you set g:nv_main_directory, it must ALSO appear in g:nv_search_paths
+" for its contents to be searchable.
 "let g:nv_main_directory = g:nv_main_directory or (first directory in g:nv_search_paths)
 
 " Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
@@ -219,6 +231,13 @@ let g:nv_preview_width = 50
 " String. Determines where the preview window is. Valid options are: 'right', 'left', 'up', 'down'.
 let g:nv_preview_direction = 'right'
 
+" String. Preview window border style. Options: 'border-left', 'border-rounded', 'border-sharp', 'noborder'.
+" Requires fzf 0.35+.
+let g:nv_preview_border = 'border-left'
+
+" Boolean. Use tmux popup window instead of vim split (requires fzf 0.53+ and tmux).
+let g:nv_use_tmux_popup = 0
+
 " String. Yanks the selected filenames to the default register.
 let g:nv_yank_key = 'ctrl-y'
 
@@ -246,6 +265,14 @@ If `bat` is in the PATH then it will be used. It will use `$BAT_THEME` if it's s
 You can also define your own handler function, in case you don't like
 how this plugin handles input but like how it wraps everything else. It
 *must* be called `NV_note_handler`.
+
+Integration with Goyo and other plugins may be accomplished by intercepting
+the `User#NVLeave` event:
+
+``` {.vim}
+autocmd! User NVLeave Goyo
+```
+
 
 ## Potential Use Cases
 
