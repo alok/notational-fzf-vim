@@ -12,10 +12,13 @@ height = int(sys.argv[3])
 
 
 def opcount(fname):
-    with open(fname) as f:
-        for i, _ in enumerate(f):
-            pass
-    return i + 1
+    try:
+        with open(fname, encoding="utf-8", errors="replace") as f:
+            for i, _ in enumerate(f):
+                pass
+        return i + 1
+    except Exception:
+        return 0
 
 
 if __name__ == "__main__":
@@ -39,10 +42,14 @@ if __name__ == "__main__":
         RED = "\033[1;31m"
         RESET = "\033[0;0m"
         BOLD = "\033[;1m"
-        with open(path.normpath(file)) as f:
-            for linenum, line_content in enumerate(f, start=1):
-                if linenum == line:
-                    print(BOLD + RED + line_content.rstrip() + RESET)
-                    is_sel = True
-                elif is_sel or (line - linenum <= (height / 2 - 1)):
-                    print(line_content.rstrip())
+        try:
+            with open(path.normpath(file), encoding="utf-8", errors="replace") as f:
+                for linenum, line_content in enumerate(f, start=1):
+                    if linenum == line:
+                        print(BOLD + RED + line_content.rstrip() + RESET)
+                        is_sel = True
+                    elif is_sel or (line - linenum <= (height / 2 - 1)):
+                        print(line_content.rstrip())
+        except Exception:
+            # If file can't be read, print error message
+            print(RED + "Error: Could not read file" + RESET)
