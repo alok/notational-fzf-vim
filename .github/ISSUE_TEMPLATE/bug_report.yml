@@ -1,0 +1,66 @@
+name: Bug Report
+description: Report a bug or unexpected behavior
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please fill out the info below to help us debug.
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      placeholder: "e.g., macOS 14.0, Ubuntu 22.04, Windows 11"
+    validations:
+      required: true
+
+  - type: input
+    id: vim-version
+    attributes:
+      label: Vim/Neovim Version
+      description: "Output of `:version` (first line is enough)"
+      placeholder: "e.g., NVIM v0.9.4, VIM - Vi IMproved 9.0"
+    validations:
+      required: true
+
+  - type: input
+    id: fzf-version
+    attributes:
+      label: fzf Version
+      description: "Output of `fzf --version`"
+      placeholder: "e.g., 0.44.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: minimal-config
+    attributes:
+      label: Minimal Configuration
+      description: "A minimal vimrc/init.vim that reproduces the issue"
+      render: vim
+      placeholder: |
+        let g:nv_search_paths = ['~/notes']
+        " ... other relevant settings
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: "What happened? What did you expect?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: "How can we reproduce this bug?"
+      placeholder: |
+        1. Open vim
+        2. Run :NV
+        3. ...
+    validations:
+      required: true

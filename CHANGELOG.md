@@ -1,3 +1,29 @@
+## 3.0.0
+
+Major feature release addressing long-standing issues.
+
+### New Features
+
+- **`:NVFiles` command** - New search mode showing unique files sorted by
+  modification time. Searches both filenames and content, no duplicates.
+  Closer to original Notational Velocity behavior. (Issue #22, #70)
+
+- **`g:nv_create_if_no_results`** - Auto-create note when no results match
+  and you press Enter. (Issue #92)
+
+- **`g:nv_create_dirs`** - Map custom keys to create notes in specific
+  directories. Example: `{'ctrl-1': '~/notes', 'ctrl-2': '~/work'}` (Issue #67)
+
+### Bug Fixes
+
+- Fixed shell escaping for `--bind` option to prevent errors with special
+  characters like `|` and `()`. (Issue #99)
+
+### Improvements
+
+- Added GitHub issue templates for bug reports and feature requests
+- Updated documentation with new options and commands
+
 ## 2.1.0
 
 Added more window size management with `g:nv_window_width` and

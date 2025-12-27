@@ -105,6 +105,13 @@ let s:create_note_key = get(g:, 'nv_create_note_key', 'ctrl-x')
 let s:yank_key = get(g:, 'nv_yank_key', 'ctrl-y')
 let s:create_note_window = get(g:, 'nv_create_note_window', 'vertical split ')
 
+" Auto-create note if no results match and user presses enter
+let s:create_if_no_results = get(g:, 'nv_create_if_no_results', 0)
+
+" Multi-directory create bindings (issue #67)
+" Dict mapping keys to directories, e.g. {'ctrl-1': '~/notes', 'ctrl-2': '~/work'}
+let s:create_dirs = get(g:, 'nv_create_dirs', {})
+
 let s:keymap = get(g:, 'nv_keymap',
             \ {'ctrl-s': 'split',
             \ 'ctrl-v': 'vertical split',
@@ -117,7 +124,7 @@ let s:keymap = extend(s:keymap, {
             \ })
 
 " FZF expects a comma separated string.
-let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []) + [s:yank_key], ',')
+let s:expect_keys = join(keys(s:keymap) + get(g:, 'nv_expect_keys', []) + [s:yank_key] + keys(s:create_dirs), ',')
 
 "================================ Yank string ==============================
 
@@ -172,6 +179,12 @@ function! s:handler(lines) abort
    " strings.
    let query    = a:lines[0]
    let keypress = a:lines[1]
+
+   " Auto-create note if no results match (issue #92)
+   " a:lines[2:] contains selected files - if empty and query exists, create
+   if s:create_if_no_results && len(a:lines) <= 2 && query != ''
+       let keypress = s:create_note_key
+   endif
    " `edit` is fallback in case something goes wrong
    let cmd = get(s:keymap, keypress, 'edit')
    " Preprocess candidates here. expect lines to have fmt
@@ -184,6 +197,11 @@ function! s:handler(lines) abort
    " Handle creating note.
    if keypress ==? s:create_note_key
      let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
+   elseif has_key(s:create_dirs, keypress)
+     " Multi-directory create (issue #67)
+     let create_dir = expand(s:create_dirs[keypress])
+     let candidates = [fnameescape(create_dir . '/' . query . s:ext)]
+     let cmd = s:create_note_window
    elseif keypress ==? s:yank_key
      let pat = '\v(.{-}):\d+:'
      let hashes = join(filter(map(copy(a:lines[2:]), 'matchlist(v:val, pat)[1]'), 'len(v:val)'), s:yank_separator)
@@ -258,7 +276,7 @@ command! -nargs=* -bang NV
                                \ '--expect=' . s:expect_keys ,
                                \ '--scroll-off=3',
                                \ (s:use_tmux_popup && exists('$TMUX') ? '--tmux=center,80%,60%' : ''),
-                               \ '--bind=' .  join([
+                               \ '--bind=' .  shellescape(join([
                                               \ 'alt-a:select-all',
                                               \ 'alt-q:deselect-all',
                                               \ 'alt-p:toggle-preview',
@@ -267,7 +285,7 @@ command! -nargs=* -bang NV
                                               \ 'alt-w:toggle-preview-wrap',
                                               \ 'ctrl-w:backward-kill-word',
                                               \ 'ctrl-/:change-preview-window(down|hidden|)',
-                                              \ ], ','),
+                                              \ ], ',')),
                                \ '--preview=' . shellescape(s:highlight_path_expr) ,
                                \ '--preview-window=' . join(filter(copy([
                                                                    \ s:preview_direction,
@@ -279,5 +297,104 @@ command! -nargs=* -bang NV
                                                             \ 'v:val != "" ')
                                                        \ ,':')
                                \ ])},<bang>0))
+
+
+"============================== NVFiles Command (Issue #22) =================
+" Unique file mode: searches both filenames and content, returns unique files
+" sorted by modification time. No duplicate entries per file.
+
+let s:unique_search_script = expand('<sfile>:p:h:h') . '/unique_files_search.py'
+
+function! s:files_handler(lines) abort
+    if a:lines == [] || a:lines == ['','']
+        return
+    endif
+
+    let query = a:lines[0]
+    let keypress = a:lines[1]
+    let cmd = get(s:keymap, keypress, 'edit')
+
+    if exists('#User#NVEnter')
+        doautocmd User NVEnter
+    endif
+
+    " Handle creating note
+    if keypress ==? s:create_note_key
+        let candidates = [fnameescape(s:main_dir . '/' . query . s:ext)]
+    elseif has_key(s:create_dirs, keypress)
+        let create_dir = expand(s:create_dirs[keypress])
+        let candidates = [fnameescape(create_dir . '/' . query . s:ext)]
+        let cmd = s:create_note_window
+    elseif keypress ==? s:yank_key
+        let hashes = join(a:lines[2:], s:yank_separator)
+        return s:yank_to_register(hashes)
+    else
+        " Files only - no line numbers to parse
+        let candidates = map(copy(a:lines[2:]), 'fnameescape(v:val)')
+    endif
+
+    " Auto-create if no results and option enabled
+    if s:create_if_no_results && len(a:lines) <= 2 && query != ''
+        let candidates = [fnameescape(s:main_dir . '/' . query . s:ext)]
+        let cmd = s:create_note_window
+    endif
+
+    for candidate in candidates
+        execute join([cmd, candidate])
+    endfor
+
+    if exists('#User#NVLeave')
+        doautocmd User NVLeave
+    endif
+endfunction
+
+" Preview command for file-only mode (no line numbers)
+let s:file_preview_expr = 'bat --style=plain --color=always {} 2>' . s:null_path . ' || cat {}'
+
+command! -nargs=* -bang NVFiles
+      \ call fzf#run(
+          \ fzf#wrap({
+              \ 'sink*': function(exists('*NV_files_handler') ? 'NV_files_handler' : '<sid>files_handler'),
+              \ 'window': s:window_command,
+              \ 'source': join([
+                   \ s:python_executable,
+                   \ '-S',
+                   \ shellescape(s:unique_search_script),
+                   \ shellescape(<q-args>),
+                   \ s:search_path_str,
+                   \ '2>' . s:null_path,
+                   \ ]),
+              \ s:window_direction: s:window_width,
+              \ 'options': join([
+                              \ '--print-query',
+                              \ '--ansi',
+                              \ '--multi',
+                              \ '--info=inline',
+                              \ '--tiebreak=index',
+                              \ '--expect=' . s:expect_keys,
+                              \ '--scroll-off=3',
+                              \ (s:use_tmux_popup && exists('$TMUX') ? '--tmux=center,80%,60%' : ''),
+                              \ '--bind=' . shellescape(join([
+                                             \ 'alt-a:select-all',
+                                             \ 'alt-q:deselect-all',
+                                             \ 'alt-p:toggle-preview',
+                                             \ 'alt-u:page-up',
+                                             \ 'alt-d:page-down',
+                                             \ 'alt-w:toggle-preview-wrap',
+                                             \ 'ctrl-w:backward-kill-word',
+                                             \ 'ctrl-/:change-preview-window(down|hidden|)',
+                                             \ 'change:reload:' . s:python_executable . ' -S ' . shellescape(s:unique_search_script) . ' {q} ' . s:search_path_str,
+                                             \ ], ',')),
+                              \ '--preview=' . shellescape(s:file_preview_expr),
+                              \ '--preview-window=' . join(filter(copy([
+                                                                  \ s:preview_direction,
+                                                                  \ s:preview_width,
+                                                                  \ s:wrap_text,
+                                                                  \ s:show_preview,
+                                                                  \ s:preview_border,
+                                                                  \ ]),
+                                                           \ 'v:val != "" ')
+                                                      \ ,':')
+                              \ ])},<bang>0))
 
 

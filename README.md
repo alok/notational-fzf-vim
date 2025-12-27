@@ -1,9 +1,6 @@
-# Looking for Maintainer
-
-I don't have time to maintain this project anymore. If you are interested in
-taking over, please contact me in the GitHub issues.
-
 # Notational FZF
+
+[![Actively Maintained](https://img.shields.io/badge/status-actively%20maintained-brightgreen)](https://github.com/alok/notational-fzf-vim/issues)
 
 ***Loosen the mental blockages to recording information. Scrape away the
 tartar of convention that handicaps its retrieval.***
@@ -119,9 +116,13 @@ let g:nv_search_paths = ['~/wiki', '~/writing', '~/code', 'docs.md' , './notes.m
 
 ## Detailed Usage
 
-This plugin unites searching and file creation. It defines a single
-command `:NV`, which can take 0 or more arguments, which are interpreted
-as regexes.
+This plugin unites searching and file creation. It defines two commands:
+
+### `:NV` - Line-based Search (Original)
+
+The original command that searches content line-by-line. When you select a
+result, it opens the file and jumps to the matching line. Best for finding
+specific content within notes.
 
 Type `:NV` or bind it to a mapping to bring up a fuzzy search menu. Type
 in your search terms and it will fuzzy search for them. Adding an
@@ -159,16 +160,42 @@ Additional built-in keybindings:
 
 The lines around the selected file will be visible in a preview window.
 
+### `:NVFiles` - Unique File Search (New)
+
+An alternative command that shows unique files instead of individual lines.
+Files are sorted by modification time (most recent first), and both filenames
+and file contents are searched. This is closer to the original Notational
+Velocity behavior.
+
+```vim
+:NVFiles        " Show all files sorted by mtime, filter interactively
+:NVFiles python " Pre-filter to files matching 'python'
+:NVFiles!       " Fullscreen mode
+```
+
+**Key differences from `:NV`:**
+- Shows each file only once (no duplicates)
+- Sorted by modification time (most recent first)
+- Searches both filenames and content
+- Opens file at the beginning (no line jumping)
+- Interactive filtering re-searches as you type
+
+**Use `:NV` when:** You need to find a specific line or jump to exact content.
+
+**Use `:NVFiles` when:** You're looking for a note by name or topic and don't
+need to jump to a specific line.
+
 ## Mappings
 
-This plugin only defines a command `:NV`, and if you want a mapping for
-it, you can define it yourself. This is intentionally not done by
-default. You should use whatever mapping(s) work best for you.
+This plugin defines `:NV` and `:NVFiles` commands. If you want mappings
+for them, you can define them yourself. This is intentionally not done
+by default. You should use whatever mapping(s) work best for you.
 
 For example,
 
 ``` {.vim}
 nnoremap <silent> <c-s> :NV<CR>
+nnoremap <silent> <c-n> :NVFiles<CR>
 ```
 
 ## Optional Settings and Their Defaults
@@ -256,6 +283,15 @@ let g:nv_ignore_pattern = ['summarize-*', 'misc*']
 " handler function. Most users won't want to set this to anything.
 
 let g:nv_expect_keys = []
+
+" Boolean. If set, automatically create a note when no results match and you
+" press Enter. Disabled by default to preserve original behavior.
+let g:nv_create_if_no_results = 0
+
+" Dictionary. Map keys to directories for creating notes in specific locations.
+" Each key creates a note in the corresponding directory instead of g:nv_main_directory.
+" Example: let g:nv_create_dirs = {'ctrl-1': '~/notes', 'ctrl-2': '~/work'}
+let g:nv_create_dirs = {}
 ```
 
 ### bat config

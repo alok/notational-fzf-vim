@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install vint
+        run: pip install vim-vint
+
+      - name: Lint Vimscript
+        run: vint plugin/notational_fzf.vim
+
+  test-python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Test Python scripts syntax
+        run: |
+          python -m py_compile shorten_path_for_notational_fzf.py
+          python -m py_compile print_lines.py
+          python -m py_compile unique_files_search.py
+
+      - name: Test unique_files_search.py
+        run: |
+          mkdir -p test_notes
+          echo "hello world" > test_notes/note1.md
+          echo "python code" > test_notes/note2.md
+          sleep 0.1
+          echo "recent note" > test_notes/note3.md
+          # Test with empty query (should list all files by mtime)
+          python unique_files_search.py "" test_notes
+          # Test with query
+          python unique_files_search.py "python" test_notes
+          rm -rf test_notes

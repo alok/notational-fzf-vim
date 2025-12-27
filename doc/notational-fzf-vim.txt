@@ -12,6 +12,8 @@ CONTENTS                                             *notational-fzf-contents*
     1.6. Optional dependencies..........|notational-fzf-optional_dependencies|
     1.7. Required Settings..................|notational-fzf-required_settings|
     1.8. Detailed Usage........................|notational-fzf-detailed_usage|
+        1.8.1. :NV Command...............................|notational-fzf-nv|
+        1.8.2. :NVFiles Command.....................|notational-fzf-nvfiles|
     1.9. Mappings....................................|notational-fzf-mappings|
     1.10. Optional Settings and Their Defaults.|notational-fzf-optional_settings_and_their_defaults|
         1.10.1. bat config.........................|notational-fzf-bat_config|
@@ -137,17 +139,22 @@ Remember that these can be relative links.
 --------------------------------------------------------------------------------
 DETAILED USAGE                                 *notational-fzf-detailed_usage*
 
-This plugin unites searching and file creation. It defines a single
-command `:NV`, which can take 0 or more arguments, which are interpreted
-as regexes.
+This plugin unites searching and file creation. It defines two commands:
+`:NV` for line-based search and `:NVFiles` for unique file search.
+
+                                                             *notational-fzf-nv*
+:NV Command ~
+
+The original command that searches content line-by-line. When you select
+a result, it opens the file and jumps to the matching line.
 
 Type `:NV` or bind it to a mapping to bring up a fuzzy search menu. Type
 in your search terms and it will fuzzy search for them. Adding an
 exclamation mark to the command (`:NV!`), will run it fullscreen.
 
 You can type `:NV` to see all results, and then filter them with FZF.
-You can type  to restrict your initial search to lines that
-contain the phrase `python`.  will find all numbers
+You can type `:NV python` to restrict your initial search to lines that
+contain the phrase `python`. `:NV [0-9] [0-9]` will find all numbers
 separated by a space. You know, regexes.
 
 It does not search in a fully fuzzy fashion because that's less useful
@@ -167,16 +174,38 @@ Note that the following options can be customized.
 
 The lines around the selected file will be visible in a preview window.
 
+                                                        *notational-fzf-nvfiles*
+:NVFiles Command ~
+
+An alternative command that shows unique files instead of individual lines.
+Files are sorted by modification time (most recent first), and both
+filenames and file contents are searched.
+>
+    :NVFiles        " Show all files sorted by mtime
+    :NVFiles python " Pre-filter to files matching 'python'
+    :NVFiles!       " Fullscreen mode
+<
+Key differences from `:NV`:
+*   Shows each file only once (no duplicates)
+*   Sorted by modification time (most recent first)
+*   Searches both filenames and content
+*   Opens file at the beginning (no line jumping)
+*   Interactive filtering re-searches as you type
+
+Use `:NV` when you need to find a specific line or jump to exact content.
+Use `:NVFiles` when you're looking for a note by name or topic.
+
 --------------------------------------------------------------------------------
 MAPPINGS                                             *notational-fzf-mappings*
 
-This plugin only defines a command `:NV`, and if you want a mapping for
-it, you can define it yourself. This is intentionally not done by
-default. You should use whatever mapping(s) work best for you.
+This plugin defines `:NV` and `:NVFiles` commands. If you want mappings
+for them, you can define them yourself. This is intentionally not done
+by default. You should use whatever mapping(s) work best for you.
 
 For example,
 >
     nnoremap <silent> <c-s> :NV<CR>
+    nnoremap <silent> <c-n> :NVFiles<CR>
 <
 
 --------------------------------------------------------------------------------
@@ -238,6 +267,15 @@ default, set .
     " List of Strings. Key mappings like above in case you want to define your own
     " handler function. Most users won't want to set this to anything.
     let g:nv_expect_keys = []
+
+    " Boolean. If set, automatically create a note when no results match
+    " and you press Enter. Disabled by default.
+    let g:nv_create_if_no_results = 0
+
+    " Dictionary. Map keys to directories for creating notes in specific
+    " locations. Each key creates a note in the corresponding directory.
+    " Example: let g:nv_create_dirs = {'ctrl-1': '~/notes', 'ctrl-2': '~/work'}
+    let g:nv_create_dirs = {}
 <
 
 BAT CONFIG                                         *notational-fzf-bat_config*
