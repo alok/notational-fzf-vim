@@ -175,57 +175,56 @@ function! s:handler(lines) abort
     if a:lines == [] || a:lines == ['','','']
         return
     endif
-   " Expect at least 2 elements, `query` and `keypress`, which may be empty
-   " strings.
-   let query    = a:lines[0]
-   let keypress = a:lines[1]
+    " Expect at least 2 elements, `query` and `keypress`, which may be empty
+    " strings.
+    let query    = a:lines[0]
+    let keypress = a:lines[1]
 
-   " Auto-create note if no results match (issue #92)
-   " a:lines[2:] contains selected files - if empty and query exists, create
-   if s:create_if_no_results && len(a:lines) <= 2 && query != ''
-       let keypress = s:create_note_key
-   endif
-   " `edit` is fallback in case something goes wrong
-   let cmd = get(s:keymap, keypress, 'edit')
-   " Preprocess candidates here. expect lines to have fmt
-   " filename:linenum:content
+    " Auto-create note if no results match (issue #92)
+    " a:lines[2:] contains selected files - if empty and query exists, create
+    if s:create_if_no_results && len(a:lines) <= 2 && query != ''
+        let keypress = s:create_note_key
+    endif
 
-   if exists('#User#NVEnter')
-     doautocmd User NVEnter
-   endif
+    " `edit` is fallback in case something goes wrong
+    let cmd = get(s:keymap, keypress, 'edit')
 
-   " Handle creating note.
-   if keypress ==? s:create_note_key
-     let candidates = [fnameescape(s:main_dir  . '/' . query . s:ext)]
-   elseif has_key(s:create_dirs, keypress)
-     " Multi-directory create (issue #67)
-     let create_dir = expand(s:create_dirs[keypress])
-     let candidates = [fnameescape(create_dir . '/' . query . s:ext)]
-     let cmd = s:create_note_window
-   elseif keypress ==? s:yank_key
-     let pat = '\v(.{-}):\d+:'
-     let hashes = join(filter(map(copy(a:lines[2:]), 'matchlist(v:val, pat)[1]'), 'len(v:val)'), s:yank_separator)
-     return s:yank_to_register(hashes)
-   else
-       let filenames = a:lines[2:]
-       let candidates = []
-       for filename in filenames
-           " Don't forget trailing space in replacement.
-           let linenum = substitute(filename, '\v.{-}:(\d+):.*$', '+\1 ', '')
-           let name = substitute(filename, '\v(.{-}):\d+:.*$', '\1', '')
-           " fnameescape instead of shellescape because the file is consumed
-           " by vim rather than the shell
-           call add(candidates, linenum . fnameescape(name))
-       endfor
-   endif
+    if exists('#User#NVEnter')
+        doautocmd User NVEnter
+    endif
 
-   for candidate in candidates
-       execute join([cmd, candidate])
-   endfor
+    " Handle creating note.
+    if keypress ==? s:create_note_key
+        let candidates = [fnameescape(s:main_dir . '/' . query . s:ext)]
+    elseif has_key(s:create_dirs, keypress)
+        " Multi-directory create (issue #67)
+        let create_dir = expand(s:create_dirs[keypress])
+        let candidates = [fnameescape(create_dir . '/' . query . s:ext)]
+        let cmd = s:create_note_window
+    elseif keypress ==? s:yank_key
+        let pat = '\v(.{-}):\d+:'
+        let hashes = join(filter(map(copy(a:lines[2:]), 'matchlist(v:val, pat)[1]'), 'len(v:val)'), s:yank_separator)
+        return s:yank_to_register(hashes)
+    else
+        let filenames = a:lines[2:]
+        let candidates = []
+        for filename in filenames
+            " Don't forget trailing space in replacement.
+            let linenum = substitute(filename, '\v.{-}:(\d+):.*$', '+\1 ', '')
+            let name = substitute(filename, '\v(.{-}):\d+:.*$', '\1', '')
+            " fnameescape instead of shellescape because the file is consumed
+            " by vim rather than the shell
+            call add(candidates, linenum . fnameescape(name))
+        endfor
+    endif
 
-   if exists('#User#NVLeave')
-     doautocmd User NVLeave
-   endif
+    for candidate in candidates
+        execute join([cmd, candidate])
+    endfor
+
+    if exists('#User#NVLeave')
+        doautocmd User NVLeave
+    endif
 endfunction
 
 " If the file you're looking for is empty, then why does it even exist? It's a
@@ -271,12 +270,12 @@ command! -nargs=* -bang NV
                                \ '--exact',
                                \ '--info=inline',
                                \ '--delimiter=":"',
-                               \ '--with-nth=' . s:display_start_index ,
-                               \ '--tiebreak=' . 'length,begin' ,
-                               \ '--expect=' . s:expect_keys ,
+                               \ '--with-nth=' . s:display_start_index,
+                               \ '--tiebreak=' . 'length,begin',
+                               \ '--expect=' . s:expect_keys,
                                \ '--scroll-off=3',
                                \ (s:use_tmux_popup && exists('$TMUX') ? '--tmux=center,80%,60%' : ''),
-                               \ '--bind=' .  shellescape(join([
+                               \ '--bind=' . shellescape(join([
                                               \ 'alt-a:select-all',
                                               \ 'alt-q:deselect-all',
                                               \ 'alt-p:toggle-preview',
@@ -286,7 +285,7 @@ command! -nargs=* -bang NV
                                               \ 'ctrl-w:backward-kill-word',
                                               \ 'ctrl-/:change-preview-window(down|hidden|)',
                                               \ ], ',')),
-                               \ '--preview=' . shellescape(s:highlight_path_expr) ,
+                               \ '--preview=' . shellescape(s:highlight_path_expr),
                                \ '--preview-window=' . join(filter(copy([
                                                                    \ s:preview_direction,
                                                                    \ s:preview_width,
@@ -312,6 +311,13 @@ function! s:files_handler(lines) abort
 
     let query = a:lines[0]
     let keypress = a:lines[1]
+    let selected_files = a:lines[2:]
+
+    " Auto-create if no results and option enabled (before other processing)
+    if s:create_if_no_results && empty(selected_files) && query != ''
+        let keypress = s:create_note_key
+    endif
+
     let cmd = get(s:keymap, keypress, 'edit')
 
     if exists('#User#NVEnter')
@@ -326,17 +332,15 @@ function! s:files_handler(lines) abort
         let candidates = [fnameescape(create_dir . '/' . query . s:ext)]
         let cmd = s:create_note_window
     elseif keypress ==? s:yank_key
-        let hashes = join(a:lines[2:], s:yank_separator)
+        let hashes = join(selected_files, s:yank_separator)
         return s:yank_to_register(hashes)
     else
         " Files only - no line numbers to parse
-        let candidates = map(copy(a:lines[2:]), 'fnameescape(v:val)')
+        let candidates = map(copy(selected_files), 'fnameescape(v:val)')
     endif
 
-    " Auto-create if no results and option enabled
-    if s:create_if_no_results && len(a:lines) <= 2 && query != ''
-        let candidates = [fnameescape(s:main_dir . '/' . query . s:ext)]
-        let cmd = s:create_note_window
+    if empty(candidates)
+        return
     endif
 
     for candidate in candidates
